@@ -24,13 +24,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pages
+        id: setup_pages
+        continue-on-error: true
         uses: actions/configure-pages@v5
         with:
-          enablement: true
+          enablement: false
       - name: Upload site artifact
+        if: steps.setup_pages.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
       - name: Deploy to GitHub Pages
+        if: steps.setup_pages.outcome == 'success'
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Skip deployment when Pages is not configured
+        if: steps.setup_pages.outcome != 'success'
+        run: echo "GitHub Pages is not enabled for this repository. Skipping deployment."

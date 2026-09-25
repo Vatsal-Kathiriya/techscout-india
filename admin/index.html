@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <title>Admin | genztechco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <main class="admin-login" id="loginView">
+      <a class="admin-logo" href="../index.html"><span class="admin-logo-mark">gz</span><span>genz<span>techco</span></span></a>
+      <div class="login-card">
+        <p class="eyebrow">PRIVATE WORKSPACE</p>
+        <h1>Welcome back.</h1>
+        <p>Manage products and read messages from one calm dashboard.</p>
+        <form id="loginForm">
+          <label>API URL<input id="apiUrl" type="url" placeholder="https://genztechco-api.onrender.com" required /></label>
+          <label>Admin email<input id="email" type="email" autocomplete="username" required /></label>
+          <label>Password<input id="password" type="password" autocomplete="current-password" required /></label>
+          <button class="primary-button" type="submit">Sign in <span>↗</span></button>
+          <p class="form-status" id="loginStatus" role="status"></p>
+        </form>
+      </div>
+      <p class="login-help">Your API URL is the Render service URL. Keep admin credentials in Render environment variables.</p>
+    </main>
+
+    <div class="admin-app hidden" id="appView">
+      <aside class="admin-sidebar">
+        <a class="admin-logo" href="../index.html"><span class="admin-logo-mark">gz</span><span>genz<span>techco</span></span></a>
+        <nav class="admin-nav" aria-label="Admin navigation">
+          <button class="active" data-view="overview">Overview</button>
+          <button data-view="products">Products</button>
+          <button data-view="messages">Messages <span class="nav-badge" id="messageBadge">0</span></button>
+        </nav>
+        <div class="sidebar-bottom"><a href="../index.html">View storefront ↗</a><button id="logoutButton">Sign out</button></div>
+      </aside>
+      <section class="admin-content">
+        <header class="admin-topbar"><div><span class="mobile-kicker">ADMIN WORKSPACE</span><h1 id="viewTitle">Overview</h1></div><button class="primary-button" id="newProductButton">+ New product</button></header>
+        <div class="admin-view" id="overviewView">
+          <div class="stats-grid"><article><span>CATALOG ITEMS</span><strong id="productStat">—</strong><small>Total products in MongoDB</small></article><article><span>PUBLISHED</span><strong id="publishedStat">—</strong><small>Visible on the storefront</small></article><article><span>NEW MESSAGES</span><strong id="messageStat">—</strong><small>Waiting for your reply</small></article></div>
+          <div class="admin-panel intro-panel"><div><p class="eyebrow">YOUR CONTROL ROOM</p><h2>Keep the catalog<br /><em>feeling fresh.</em></h2><p>Add products, update price snapshots and review contact submissions. Changes saved here are ready for the public API.</p></div><div class="panel-orb">GZ</div></div>
+          <div class="admin-panel"><div class="panel-heading"><div><p class="eyebrow">RECENT PRODUCTS</p><h2>Latest updates</h2></div><button class="text-button" data-view-link="products">Manage all →</button></div><div class="compact-list" id="recentProducts"></div></div>
+        </div>
+        <div class="admin-view hidden" id="productsView">
+          <div class="admin-panel"><div class="panel-heading"><div><p class="eyebrow">CATALOG</p><h2>All products</h2></div><button class="primary-button" id="newProductButtonSecondary">+ New product</button></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Status</th><th></th></tr></thead><tbody id="productsTable"></tbody></table></div></div>
+        </div>
+        <div class="admin-view hidden" id="messagesView">
+          <div class="admin-panel"><div class="panel-heading"><div><p class="eyebrow">INBOX</p><h2>Contact messages</h2></div></div><div class="table-wrap"><table><thead><tr><th>From</th><th>Topic</th><th>Message</th><th>Status</th><th></th></tr></thead><tbody id="messagesTable"></tbody></table></div></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-backdrop hidden" id="modalBackdrop"></div>
+    <section class="product-modal hidden" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header"><div><p class="eyebrow">CATALOG EDITOR</p><h2 id="modalTitle">New product</h2></div><button class="modal-close" id="modalClose" aria-label="Close product editor">×</button></div>
+      <form id="productForm">
+        <input id="productId" type="hidden" />
+        <div class="form-grid"><label>Name<input id="productName" required maxlength="180" /></label><label>Category<input id="productCategory" required maxlength="80" /></label><label>Price (INR)<input id="productPrice" type="number" min="0" required /></label><label>Compare-at price<input id="productOldPrice" type="number" min="0" /></label><label>Rating<input id="productRating" type="number" min="0" max="5" step=".1" /></label><label>Review references<input id="productReviews" /></label><label>Badge<input id="productBadge" /></label><label>Deal label<input id="productDeal" /></label></div>
+        <label>Image URL<input id="productImage" type="url" required /></label>
+        <label>Outbound product URL<input id="productOutboundUrl" type="url" placeholder="https://www.amazon.in/..." /></label>
+        <label>Description<textarea id="productDescription" rows="3" required></textarea></label>
+        <div class="form-grid"><label>Best for<input id="productBestFor" /></label><label>One thing to consider<input id="productConsider" /></label></div>
+        <label>Specifications <small>Separate with commas</small><input id="productSpecs" /></label>
+        <label>Pros <small>Separate with commas</small><input id="productPros" /></label>
+        <label class="checkbox-label"><input id="productPublished" type="checkbox" checked /> Published on storefront</label>
+        <p class="form-status" id="productStatus" role="status"></p>
+        <div class="modal-actions"><button class="secondary-button" type="button" id="modalCancel">Cancel</button><button class="primary-button" type="submit">Save product <span>↗</span></button></div>
+      </form>
+    </section>
+    <script src="../site-config.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

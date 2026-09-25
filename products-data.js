@@ -8,3 +8,25 @@ const products = [
   {id:7,category:"Laptops",name:"Apple MacBook Air M2",price:84990,old:99900,rating:"4.8",reviews:"2,453",badge:"EDITOR'S PICK",deal:"15% off",image:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=700&q=80",description:"A silent, slim and dependable laptop with Apple's M2 chip, excellent battery life and a beautiful display.",specs:["13.6-inch Liquid Retina display","Apple M2 chip","8GB unified memory","Up to 18 hours battery"]},
   {id:8,category:"Audio",name:"JBL Tune 770NC Wireless",price:5999,old:7999,rating:"4.4",reviews:"5,890",badge:"DEAL",deal:"25% off",image:"https://images.unsplash.com/photo-1583394838336-acd977736f90?w=700&q=80",description:"Comfortable wireless headphones with adaptive noise cancellation and punchy JBL sound for less.",specs:["Adaptive noise cancellation","Up to 70 hours battery","Bluetooth 5.3","Foldable lightweight design"]}
 ];
+
+const catalogMeta = {
+  label: "Editorial snapshot",
+  note: "Prices and product details are sample snapshots until an approved marketplace feed is connected."
+};
+
+const editorialNotes = {
+  1: {bestFor: "Everyday phone buyers", pros: ["Distinctive design", "Clean software", "Strong battery life"], consider: "Not the best pick for heavy gaming."},
+  2: {bestFor: "Work and study", pros: ["Excellent OLED display", "Comfortable keyboard", "Plenty of memory"], consider: "Not designed for demanding gaming."},
+  3: {bestFor: "Frequent travellers", pros: ["Excellent ANC", "Premium comfort", "Reliable multipoint"], consider: "Premium price for premium sound."},
+  4: {bestFor: "Everyday carry", pros: ["Large capacity", "USB-C charging", "Good value"], consider: "Heavier than a compact pocket power bank."},
+  5: {bestFor: "Health-conscious users", pros: ["Useful health tools", "Bright display", "Polished software"], consider: "Some features work best with a Samsung phone."},
+  6: {bestFor: "Budget 5G shoppers", pros: ["Long battery life", "Fast charging", "Smooth display"], consider: "Camera performance is practical rather than flagship."},
+  7: {bestFor: "Portable productivity", pros: ["Excellent battery life", "Silent performance", "Sharp display"], consider: "Port selection is intentionally minimal."},
+  8: {bestFor: "Affordable ANC", pros: ["Long battery life", "Comfortable fit", "Strong discount"], consider: "Materials feel more practical than luxurious."}
+};
+
+products.forEach(product => Object.assign(product, editorialNotes[product.id]));
+
+if (typeof module !== "undefined") {
+  module.exports = { products, catalogMeta };
+}

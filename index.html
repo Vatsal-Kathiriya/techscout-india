@@ -3,25 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="The smart way to discover India's best tech deals." />
-    <title>TechScout India — Find your next upgrade</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <meta name="description" content="genztechco helps you discover better tech with less noise." />
+    <title>genztechco — Tech for your era</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="enhancements.css" />
   </head>
   <body>
-    <div class="announcement"><span>✦</span> Curated tech deals for India <span class="announcement-note">Prices checked daily · Amazon.in links</span></div>
+    <div class="announcement"><span>✦</span> Curated tech picks for India <span class="announcement-note">Editorial snapshots · Amazon.in links</span></div>
     <header class="site-header">
-      <a class="brand" href="#"><span class="brand-mark">TS</span><span>tech<span>scout</span><small>.in</small></span></a>
+      <a class="brand" href="index.html" aria-label="genztechco home"><span class="brand-mark"><span>g</span>z</span><span class="brand-name">genz<span>techco</span></span></a>
       <nav class="main-nav" aria-label="Main navigation">
         <a class="active" href="#discover">Discover</a>
         <a href="#categories">Categories</a>
-        <a href="#how-it-works">How it works</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
       <div class="header-actions">
         <button class="icon-button" id="wishlistButton" aria-label="View wishlist">♡ <span class="header-count" id="wishlistCount">0</span></button>
-        <button class="cart-button" id="cartButton">Bag <span class="header-count" id="cartCount">0</span></button>
+        <button class="cart-button" id="cartButton">Saved deals <span class="header-count" id="cartCount">0</span></button>
+        <a class="admin-nav-link" href="admin/">Admin</a>
       </div>
     </header>
 
@@ -30,13 +34,13 @@
         <div class="hero-copy">
           <p class="eyebrow">THE BETTER WAY TO SHOP TECH</p>
           <h1>Good tech.<br /><em>Zero noise.</em></h1>
-          <p class="hero-subtitle">We scan thousands of products so you only see the ones worth your money. Independent picks, clear specs, real value.</p>
+          <p class="hero-subtitle">A calmer way to compare tech. Editorial picks, clear specs, price snapshots and practical buying notes.</p>
           <div class="hero-search">
             <span>⌕</span>
             <input id="searchInput" type="search" placeholder="Search phones, laptops, headphones..." aria-label="Search products" />
             <kbd>⌘ K</kbd>
           </div>
-          <div class="hero-meta"><span class="live-dot"></span> <strong id="productCount">2,400+</strong> products tracked <span class="meta-divider"></span> Updated today</div>
+          <div class="hero-meta"><span class="live-dot"></span> <strong id="productCount">8</strong> curated picks <span class="meta-divider"></span> Editorial snapshot</div>
         </div>
         <div class="hero-art" aria-hidden="true">
           <div class="orb orb-one"></div><div class="orb orb-two"></div>
@@ -48,17 +52,18 @@
       <section class="category-strip" id="categories">
         <div class="section-heading"><p class="eyebrow">BROWSE BY CATEGORY</p><a href="#products">View all <span>→</span></a></div>
         <div class="category-list">
-          <button class="category active" data-category="All"><span class="category-icon">✦</span><b>All tech</b><small>2,400 items</small></button>
-          <button class="category" data-category="Phones"><span class="category-icon">▣</span><b>Phones</b><small>486 items</small></button>
-          <button class="category" data-category="Laptops"><span class="category-icon">▱</span><b>Laptops</b><small>328 items</small></button>
-          <button class="category" data-category="Audio"><span class="category-icon">◉</span><b>Audio</b><small>274 items</small></button>
-          <button class="category" data-category="Wearables"><span class="category-icon">◌</span><b>Wearables</b><small>156 items</small></button>
-          <button class="category" data-category="Accessories"><span class="category-icon">⌁</span><b>Accessories</b><small>640 items</small></button>
+          <button class="category active" data-category="All"><span class="category-icon">✦</span><b>All tech</b><small>8 curated picks</small></button>
+          <button class="category" data-category="Phones"><span class="category-icon">▣</span><b>Phones</b><small>2 picks</small></button>
+          <button class="category" data-category="Laptops"><span class="category-icon">▱</span><b>Laptops</b><small>2 picks</small></button>
+          <button class="category" data-category="Audio"><span class="category-icon">◉</span><b>Audio</b><small>2 picks</small></button>
+          <button class="category" data-category="Wearables"><span class="category-icon">◌</span><b>Wearables</b><small>1 pick</small></button>
+          <button class="category" data-category="Accessories"><span class="category-icon">⌁</span><b>Accessories</b><small>1 pick</small></button>
         </div>
       </section>
 
       <section class="products-section" id="products">
         <div class="section-heading products-heading"><div><p class="eyebrow">HANDPICKED FOR YOU</p><h2>Trending right now</h2></div><div class="sort-wrap"><label for="sortSelect">Sort by</label><select id="sortSelect"><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="rating">Top rated</option></select></div></div>
+        <div class="catalog-status" id="catalogStatus"><span class="status-mark">●</span><span><strong id="catalogStatusLabel">Editorial catalog</strong> <span id="catalogStatusText">Prices and product details are sample snapshots until a marketplace feed is connected.</span></span></div>
         <div class="filter-row"><span id="resultsLabel">Showing 6 picks</span><button id="clearFilters" class="clear-filter hidden">Clear filters ×</button></div>
         <div class="product-grid" id="productGrid"></div>
         <div class="empty-state hidden" id="emptyState"><div>⌕</div><h3>No tech found</h3><p>Try a different search or category.</p></div>
@@ -70,8 +75,20 @@
         <div class="trust-points"><div><span>01</span><h3>We do the digging</h3><p>We compare specs, reviews and pricing across the web.</p></div><div><span>02</span><h3>We keep it honest</h3><p>No paid rankings. Just useful recommendations for you.</p></div><div><span>03</span><h3>You decide</h3><p>We send you to Amazon.in to complete your purchase securely.</p></div></div>
       </section>
     </main>
-    <footer><a class="brand" href="#"><span class="brand-mark">TS</span><span>tech<span>scout</span><small>.in</small></span></a><p>Thoughtful tech, for everyone.</p><span>© 2024 TechScout India</span></footer>
+    <footer>
+      <a class="brand" href="index.html" aria-label="genztechco home"><span class="brand-mark"><span>g</span>z</span><span class="brand-name">genz<span>techco</span></span></a>
+      <p>Thoughtful tech, for your era.</p>
+      <div class="footer-links"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="admin/">Admin</a></div>
+      <span>Editorial demo · © 2024 genztechco</span>
+    </footer>
     <div class="toast" id="toast" role="status"></div>
+    <div class="drawer-backdrop hidden" id="drawerBackdrop"></div>
+    <aside class="saved-drawer" id="savedDrawer" aria-hidden="true" aria-labelledby="savedDrawerTitle">
+      <div class="drawer-header"><div><p class="eyebrow">YOUR SHORTLIST</p><h2 id="savedDrawerTitle">Saved deals</h2></div><button class="drawer-close" id="drawerClose" aria-label="Close saved deals">×</button></div>
+      <div class="saved-list" id="savedList"></div>
+      <div class="drawer-footer"><a class="buy-button" href="#products" id="drawerBrowse">Keep browsing</a></div>
+    </aside>
+    <script src="site-config.js"></script>
     <script src="products-data.js"></script>
     <script src="script.js"></script>
   </body>

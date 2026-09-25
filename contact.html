@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <meta name="description" content="Contact the genztechco team." />
+    <title>Contact | genztechco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <link rel="stylesheet" href="brand-pages.css" />
+  </head>
+  <body>
+    <div class="announcement"><span>✦</span> Curated tech picks for India <span class="announcement-note">Editorial snapshots · Amazon.in links</span></div>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="genztechco home"><span class="brand-mark"><span>g</span>z</span><span class="brand-name">genz<span>techco</span></span></a>
+      <nav class="main-nav" aria-label="Main navigation"><a href="index.html#discover">Discover</a><a href="index.html#categories">Categories</a><a href="about.html">About</a><a class="active" href="contact.html">Contact</a></nav>
+      <div class="header-actions"><a class="admin-nav-link" href="admin/">Admin</a><a class="cart-button" href="index.html">Shop picks</a></div>
+    </header>
+    <main>
+      <section class="page-hero contact-hero">
+        <div><p class="eyebrow">SAY HELLO</p><h1>Good questions<br /><em>make better picks.</em></h1><p>Found a product we should cover, spotted something that needs fixing or just want to say hi? Send us a note.</p></div>
+        <div class="contact-card"><span class="contact-card-icon">✦</span><span>hello@genztechco.in</span><small>We usually reply within two working days.</small></div>
+      </section>
+      <section class="contact-section">
+        <div class="contact-copy"><p class="eyebrow">CONTACT THE TEAM</p><h2>Let's make tech<br />less confusing.</h2><p>Use the form for product suggestions, corrections, partnerships or feedback on the site.</p><div class="contact-links"><a href="mailto:hello@genztechco.in">Email us <span>↗</span></a><a href="about.html">Read about us <span>↗</span></a></div></div>
+        <form class="contact-form" id="contactForm">
+          <label for="contactName">Your name<input id="contactName" name="name" autocomplete="name" required /></label>
+          <label for="contactEmail">Email address<input id="contactEmail" name="email" type="email" autocomplete="email" required /></label>
+          <label for="contactTopic">What is this about?<select id="contactTopic" name="topic"><option>Product suggestion</option><option>Correction</option><option>Partnership</option><option>Feedback</option></select></label>
+          <label for="contactMessage">Your message<textarea id="contactMessage" name="message" rows="5" required></textarea></label>
+          <button class="amazon-button" type="submit">Send message <span>↗</span></button>
+          <p class="form-status" id="contactStatus" role="status"></p>
+        </form>
+      </section>
+    </main>
+    <footer><a class="brand" href="index.html" aria-label="genztechco home"><span class="brand-mark"><span>g</span>z</span><span class="brand-name">genz<span>techco</span></span></a><p>Thoughtful tech, for your era.</p><div class="footer-links"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="admin/">Admin</a></div><span>Editorial demo · © 2024 genztechco</span></footer>
+    <script src="site-config.js"></script>
+    <script src="contact.js"></script>
+  </body>
+</html>

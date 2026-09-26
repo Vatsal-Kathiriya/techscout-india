@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ComparisonProvider } from '@/context/ComparisonContext';
@@ -125,17 +124,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Google AdSense — Raw script in head for instant AdSense crawler detection */}
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-4413078926879014'}`}
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className="font-sans bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 flex flex-col min-h-screen transition-colors duration-300 antialiased"
       >
-        {/* Google AdSense — active with publisher ID */}
-        <Script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-4413078926879014'}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

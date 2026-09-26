@@ -26,7 +26,7 @@ export default function AdSense({
 }: AdSenseProps) {
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
-  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID;
+  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-4413078926879014';
 
   useEffect(() => {
     if (!pubId || pushed.current) return;

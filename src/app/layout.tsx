@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
   other: {
-    'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || '',
+    'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-4413078926879014',
   },
 };
 
@@ -129,15 +129,13 @@ export default function RootLayout({
       <body
         className="font-sans bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 flex flex-col min-h-screen transition-colors duration-300 antialiased"
       >
-        {/* Google AdSense — loads only when publisher ID is configured */}
-        {process.env.NEXT_PUBLIC_ADSENSE_PUB_ID && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
+        {/* Google AdSense — active with publisher ID */}
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-4413078926879014'}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ComparisonProvider } from '@/context/ComparisonContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ComparisonDrawer from '@/components/ComparisonDrawer';
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://genz-tech.in';
 
 export const metadata: Metadata = {
   title: {
@@ -14,18 +17,31 @@ export const metadata: Metadata = {
   description:
     'Discover useful technology, compare products and find smarter buying options on Amazon India. Authoritative hardware specs, benchmarks and verified festive deals.',
   keywords: [
-    'Amazon affiliate tech',
+    'best smartphones under 20000 India',
+    'best laptops under 50000',
+    'best gaming laptop India 2026',
+    'best earbuds under 5000',
+    'best ANC headphones India',
+    'smartwatch comparison India',
+    'Amazon affiliate tech India',
     'laptop comparisons India',
-    'best 5G smartphones',
+    'best 5G smartphones 2026',
     'ANC headphones reviews',
     'GenzTech India',
     'smart tech reviews',
     'Great Indian Festival deals',
+    'Amazon India tech deals',
+    'best tech gadgets India',
+    'phone comparison tool India',
+    'gaming accessories India',
+    'best wireless earbuds India',
+    'budget smartphones India 2026',
+    'flagship phone comparison',
   ],
   authors: [{ name: 'GenzTech Editorial Lab' }],
   creator: 'GenzTech.in',
   publisher: 'GenzTech.in',
-  metadataBase: new URL('https://genz-tech.in'),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
   },
@@ -33,7 +49,7 @@ export const metadata: Metadata = {
     title: 'GenzTech.in | Smart Tech. Better Choices.',
     description:
       'Discover useful technology, compare products and find smarter buying options with GenzTech India.',
-    url: 'https://genz-tech.in',
+    url: siteUrl,
     siteName: 'GenzTech.in',
     locale: 'en_IN',
     type: 'website',
@@ -43,6 +59,7 @@ export const metadata: Metadata = {
     title: 'GenzTech.in | Smart Tech. Better Choices.',
     description:
       'Discover useful technology, compare products and find smarter buying options on Amazon India.',
+    site: '@genztech_in',
   },
   robots: {
     index: true,
@@ -55,6 +72,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
+  other: {
+    'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || '',
+  },
 };
 
 const jsonLd = {
@@ -62,26 +85,27 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://genz-tech.in/#organization',
+      '@id': `${siteUrl}/#organization`,
       name: 'GenzTech.in',
-      url: 'https://genz-tech.in',
-      logo: 'https://genz-tech.in/favicon.svg',
+      url: siteUrl,
+      logo: `${siteUrl}/favicon.svg`,
       description:
         'Smart Tech. Better Choices. Independent hardware benchmarks, comparison matrix, and Amazon India affiliate price tracking.',
+      sameAs: [],
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://genz-tech.in/#website',
-      url: 'https://genz-tech.in',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
       name: 'GenzTech.in',
       publisher: {
-        '@id': 'https://genz-tech.in/#organization',
+        '@id': `${siteUrl}/#organization`,
       },
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://genz-tech.in/products?q={search_term_string}',
+          urlTemplate: `${siteUrl}/products?q={search_term_string}`,
         },
         'query-input': 'required name=search_term_string',
       },
@@ -105,6 +129,15 @@ export default function RootLayout({
       <body
         className="font-sans bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 flex flex-col min-h-screen transition-colors duration-300 antialiased"
       >
+        {/* Google AdSense — loads only when publisher ID is configured */}
+        {process.env.NEXT_PUBLIC_ADSENSE_PUB_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

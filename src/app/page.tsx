@@ -8,6 +8,7 @@ import {
 } from '@/lib/dbService';
 import ProductCard from '@/components/ProductCard';
 import HomeClientSections from '@/components/HomeClientSections';
+import AdSense from '@/components/AdSense';
 import {
   Sparkles,
   ArrowRight,
@@ -278,11 +279,25 @@ export default async function HomePage() {
       </section>
 
       {/* ========================================================================= */}
+      {/* ADSENSE: BETWEEN DEALS AND CATEGORY TABS                                  */}
+      {/* ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4">
+        <AdSense adSlot="homepage-mid" adFormat="auto" />
+      </div>
+
+      {/* ========================================================================= */}
       {/* 3. INTERACTIVE CATEGORY TABS & FILTERED HARDWARE MATRIX                  */}
       {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 py-8">
         <HomeClientSections products={products} />
       </section>
+
+      {/* ========================================================================= */}
+      {/* ADSENSE: BETWEEN CATEGORY TABS AND GUIDES                                 */}
+      {/* ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4">
+        <AdSense adSlot="homepage-bottom" adFormat="horizontal" />
+      </div>
 
       {/* ========================================================================= */}
       {/* 4. ORIGINAL BUYING GUIDES & EDITORIAL HUB                                 */}

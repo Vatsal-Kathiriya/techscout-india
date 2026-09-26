@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getProductsFromDb, getCampaignsFromDb } from '@/lib/dbService';
 import ProductCard from '@/components/ProductCard';
+import AdSense from '@/components/AdSense';
 import { Sparkles, Flame, ShieldAlert, Clock, ArrowRight, Tag } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -73,6 +74,9 @@ export default async function DealsPage() {
           Product deals, lightning coupons, and promotional bank offers on Amazon.in fluctuate continuously based on stock levels. The prices and availability displayed here are verified periodically. The final purchase price displayed on Amazon.in at checkout applies.
         </div>
       </section>
+
+      {/* ADSENSE: DEALS PAGE */}
+      <AdSense adSlot="deals-page" adFormat="auto" />
 
       {/* 3. Deal Product Grid */}
       <section className="space-y-6">

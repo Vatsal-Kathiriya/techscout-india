@@ -1,5 +1,6 @@
 import { getProductBySlugFromDb, getProductsFromDb } from '@/lib/dbService';
 import ProductDetailView from '@/components/ProductDetailView';
+import AdSense from '@/components/AdSense';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
@@ -98,6 +99,9 @@ export default async function ProductSlugPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
       <ProductDetailView product={product} alternatives={alternatives} />
+      <div className="max-w-7xl mx-auto px-4">
+        <AdSense adSlot="product-detail" adFormat="auto" />
+      </div>
     </>
   );
 }

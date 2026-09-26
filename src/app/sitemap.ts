@@ -4,7 +4,7 @@ import { getProductsFromDb, getGuidesFromDb } from '@/lib/dbService';
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://genz-tech.in';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://genz-tech.in';
   const products = await getProductsFromDb();
   const guides = await getGuidesFromDb();
 
@@ -85,8 +85,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
+  // Use /product/<slug> (singular) to match the actual route and canonical URLs
   const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
-    url: `${baseUrl}/products/${p._id}`,
+    url: `${baseUrl}/product/${p.slug || p._id}`,
     lastModified: p.priceLastVerified ? new Date(p.priceLastVerified) : new Date(),
     changeFrequency: 'daily',
     priority: 0.8,

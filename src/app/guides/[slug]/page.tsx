@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getGuideBySlugFromDb, getProductsFromDb } from '@/lib/dbService';
 import ProductCard from '@/components/ProductCard';
+import AdSense from '@/components/AdSense';
 import {
   Clock,
   User,
@@ -214,6 +215,9 @@ export default async function GuideArticlePage({
           return <p key={idx}>{paragraph}</p>;
         })}
       </div>
+
+      {/* ADSENSE: IN-ARTICLE AD */}
+      <AdSense adSlot="guide-article" adFormat="auto" />
 
       {/* 6. Embedded Recommended Product Cards */}
       {recommendedProducts.length > 0 && (

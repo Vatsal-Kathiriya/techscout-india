@@ -1,0 +1,978 @@
+import { Product, BuyingGuide, FestiveCampaign, SiteConfig } from '@/types/store';
+
+export const INITIAL_SITE_CONFIG: SiteConfig = {
+  brandName: 'GenzTech.in',
+  tagline: 'Smart Tech. Better Choices.',
+  heroHeadline: 'Smart Tech. Better Choices.',
+  heroSubheadline:
+    'Discover useful technology, compare products and find smarter buying options.',
+  affiliateStoreId: 'genztech019-21',
+  tickerText:
+    'Great Indian Tech Festival: Up to 45% Off Flagship Laptops & 5G Phones — Verified Deals Live',
+  tickerCountdownEnd: new Date(Date.now() + 36 * 3600 * 1000).toISOString(),
+  tickerActive: true,
+  defaultPriceMode: 'indicative',
+  contactEmail: 'contact@genztech.in',
+  footerAbout:
+    "India's independent consumer hardware intelligence platform. We test, benchmark, and compare flagship smartphones, laptops, ANC headphones, and smart gear to help you make smarter purchasing decisions on Amazon.in.",
+  affiliateDisclosure:
+    'GenzTech.in is reader-supported. As an Amazon Associate, we earn from qualifying purchases.',
+  primaryCtaText: 'Explore Products',
+  primaryCtaLink: '/products',
+  secondaryCtaText: "Today's Deals",
+  secondaryCtaLink: '/deals',
+};
+
+export const INITIAL_FESTIVE_CAMPAIGNS: FestiveCampaign[] = [
+  {
+    id: 'diwali-tech-fest',
+    title: 'Great Indian Tech Festival',
+    badge: 'Limited Time Festive Deal',
+    discountHeadline: 'Up to 45% Off Flagship Laptops, 5G Phones & ANC Gear',
+    countdownEnd: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+    active: true,
+    themeColor: 'emerald',
+    bannerCta: "Explore Today's Deals",
+    targetCategory: 'laptops',
+  },
+  {
+    id: 'back-to-college',
+    title: 'Student & Creator Tech Week',
+    badge: 'Special Student Pricing',
+    discountHeadline: 'MacBooks & Ultrabooks with Instant Bank Discounts',
+    countdownEnd: new Date(Date.now() + 72 * 3600 * 1000).toISOString(),
+    active: true,
+    themeColor: 'cyan',
+    bannerCta: 'View Creator Gear',
+    targetCategory: 'laptops',
+  },
+  {
+    id: 'prime-audio-rush',
+    title: 'Audiophile & ANC Days',
+    badge: 'Lowest Price Season',
+    discountHeadline: 'Flat ₹5,000 Off Sony WH-1000XM5 & Bose QC Ultra',
+    countdownEnd: new Date(Date.now() + 18 * 3600 * 1000).toISOString(),
+    active: true,
+    themeColor: 'amber',
+    bannerCta: 'Compare Audio Gear',
+    targetCategory: 'audio',
+  },
+];
+
+export const INITIAL_PRODUCTS: Product[] = [
+  // 1. Smartphones
+  {
+    _id: 'prod-sp-01',
+    slug: 'iphone-16-pro-max',
+    asin: 'B0CHX1W1XY',
+    title: 'Apple iPhone 16 Pro Max (256 GB) - Natural Titanium',
+    brand: 'Apple',
+    category: 'smartphones',
+    price: '₹1,44,900',
+    mrp: '₹1,59,900',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=800&auto=format&fit=crop'
+    ],
+    affiliateUrl: 'https://www.amazon.in/dp/B0CHX1W1XY?tag=genztech019-21',
+    specScore: 9.6,
+    specs: {
+      processor: 'A18 Pro (3nm Gen 2)',
+      display: '6.9" Super Retina XDR OLED (120Hz ProMotion)',
+      battery: '4685 mAh (Up to 33h Video)',
+      ramStorage: '8GB RAM | 256GB NVMe',
+      weight: '227g Titanium Frame',
+      os: 'iOS 18 (Apple Intelligence Ready)'
+    },
+    verdict: 'The ultimate battery champion and videography powerhouse with unmatched ProRes Log 4K 120fps recording.',
+    editorialReview: 'The iPhone 16 Pro Max solidifies Apple\'s lead in handheld video production, thermal efficiency, and sustained battery endurance. Its 6.9-inch borderless panel delivers unmatched outdoor peak brightness.',
+    pros: ['Class-leading 33-hour battery endurance', 'Grade 5 Titanium chassis with featherweight feel', '48MP 5x Tetraprism Telephoto with anti-reflective coating'],
+    cons: ['Substantial device footprint for one-handed operation', '25W wireless charging is modest compared to Chinese flagships'],
+    dealBadge: 'Editor Choice Flagship',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.8',
+    reviews: '8,420',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-sp-02',
+    slug: 'samsung-galaxy-s24-ultra',
+    asin: 'B0CS5XVKD5',
+    title: 'Samsung Galaxy S24 Ultra 5G (Titanium Gray, 12GB RAM, 256GB Storage)',
+    brand: 'Samsung',
+    category: 'smartphones',
+    price: '₹1,29,999',
+    mrp: '₹1,34,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CS5XVKD5?tag=genztech019-21',
+    specScore: 9.5,
+    specs: {
+      processor: 'Snapdragon 8 Gen 3 for Galaxy',
+      display: '6.8" Dynamic AMOLED 2X, Gorilla Armor Anti-Reflective',
+      battery: '5000 mAh (45W Fast Charging)',
+      ramStorage: '12GB LPDDR5X | 256GB UFS 4.0',
+      weight: '232g Titanium Frame',
+      os: 'One UI 6.1 (7 Years OS Updates)'
+    },
+    verdict: 'The pinnacle of productivity and zoom optics, equipped with an anti-reflective display that changes the game outdoors.',
+    editorialReview: 'The anti-glare Gorilla Armor display coating on the S24 Ultra is one of the most practical innovations in years, virtually eliminating outdoor reflections while Galaxy AI tools streamline everyday productivity.',
+    pros: ['Gorilla Glass Armor cuts 75% of surface reflections', 'Integrated S-Pen stylus for precision input', 'Guaranteed 7-year Android OS and security update roadmap'],
+    cons: ['Flat boxy silhouette can press into palms over prolonged sessions', 'Portrait shutter latency in high-contrast indoor scenes'],
+    dealBadge: 'Best Productivity Flagship',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.6',
+    reviews: '5,180',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-sp-03',
+    slug: 'oneplus-12-5g',
+    asin: 'B0CQPNWZX8',
+    title: 'OnePlus 12 5G (Silky Black, 16GB RAM, 512GB Storage)',
+    brand: 'OnePlus',
+    category: 'smartphones',
+    price: '₹64,999',
+    mrp: '₹69,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CQPNWZX8?tag=genztech019-21',
+    specScore: 9.2,
+    specs: {
+      processor: 'Snapdragon 8 Gen 3',
+      display: '6.82" 2K 120Hz ProXDR 4500-nit LTPO',
+      battery: '5400 mAh (100W SuperVOOC + 50W AIRVOOC)',
+      ramStorage: '16GB LPDDR5X | 512GB UFS 4.0',
+      weight: '220g Curved Glass',
+      os: 'OxygenOS 14'
+    },
+    verdict: 'Unrivaled value in the flagship tier, pairing blazing 100W wired charging with a top-tier Hasselblad optical setup.',
+    editorialReview: 'OnePlus hit all the right notes with the 12. Its 5400mAh dual-cell cell refuels from 1% to 100% in under 26 minutes, and the 4th Gen Hasselblad telephoto camera punches well above its price bracket.',
+    pros: ['Phenomenal 100W fast charger bundled inside retail box', 'Industry-leading 4500-nit peak HDR display brightness', 'Immense dual-chamber vapor cooling system'],
+    cons: ['Curved glass screen edges may produce minor edge reflections', 'IP65 rating trails the IP68/69 grade of competitors'],
+    dealBadge: 'Value Flagship King',
+    isFestiveDeal: false,
+    isFeatured: true,
+    rating: '4.5',
+    reviews: '3,890',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-sp-04',
+    slug: 'nothing-phone-2',
+    asin: 'B0CB661L9P',
+    title: 'Nothing Phone (2) 5G (Dark Grey, 12GB RAM, 256GB Storage)',
+    brand: 'Nothing',
+    category: 'smartphones',
+    price: '₹36,999',
+    mrp: '₹49,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1601784551446-20c9e07cd294?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CB661L9P?tag=genztech019-21',
+    specScore: 8.8,
+    specs: {
+      processor: 'Snapdragon 8+ Gen 1',
+      display: '6.7" Flexible LTPO OLED (1-120Hz)',
+      battery: '4700 mAh (45W Fast Charging)',
+      ramStorage: '12GB RAM | 256GB Storage',
+      specialFeature: 'Interactive Glyph Interface Lighting',
+      os: 'Nothing OS 2.6'
+    },
+    verdict: 'Clean, bloatware-free software paired with iconic transparent industrial design and interactive rear glyph lights.',
+    editorialReview: 'Nothing OS remains one of the cleanest Android distributions available today. The refined rear glyph lighting actually serves functional timer and notification tracker duties without requiring screen wakes.',
+    pros: ['Iconic semi-transparent design with Glyph LED arrays', 'Fluid monochrome software experience with zero bloatware', 'Excellent sustained battery optimization'],
+    cons: ['Camera low-light processing occasionally softens fine textures', 'Snapdragon 8+ Gen 1 is previous-generation silicon'],
+    dealBadge: 'Design & Software Pick',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.3',
+    reviews: '2,845',
+    createdAt: new Date().toISOString()
+  },
+
+  // 2. Laptops
+  {
+    _id: 'prod-lp-01',
+    slug: 'macbook-pro-14-m3-pro',
+    asin: 'B0CM5JSGQY',
+    title: 'Apple 2024 MacBook Pro 14 (M3 Pro Chip, 18GB Unified Memory, 512GB SSD) - Space Black',
+    brand: 'Apple',
+    category: 'laptops',
+    price: '₹1,89,900',
+    mrp: '₹1,99,900',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CM5JSGQY?tag=genztech019-21',
+    specScore: 9.7,
+    specs: {
+      processor: 'Apple M3 Pro (11-core CPU, 14-core GPU)',
+      display: '14.2" Liquid Retina XDR (120Hz ProMotion, 1600 nits)',
+      battery: '70Wh (Up to 18 Hours Battery Life)',
+      ramStorage: '18GB Unified Memory | 512GB PCIe Gen4 SSD',
+      weight: '1.61 kg Space Black Finish',
+      os: 'macOS Sequoia'
+    },
+    verdict: 'The gold standard for mobile creators, providing identical performance on battery power with zero thermal throttling.',
+    editorialReview: 'The M3 Pro chip delivers extraordinary performance-per-watt. The 120Hz Liquid Retina XDR display provides reference-grade color precision for 4K video rendering and software engineering workloads.',
+    pros: ['Industry-dominating battery life under intense sustained compiling', 'Astonishing 6-speaker spatial sound system with deep bass', 'Anodized Space Black finish dramatically resists finger oils'],
+    cons: ['Apple unified memory and internal SSD cannot be upgraded post-purchase', 'Premium price tag requires serious creator commitment'],
+    dealBadge: 'Editor Choice Workstation',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.9',
+    reviews: '2,140',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-lp-02',
+    slug: 'asus-rog-zephyrus-g16',
+    asin: 'B0CV1D347R',
+    title: 'ASUS ROG Zephyrus G16 (2024) 16" 2.5K 240Hz OLED, Intel Core Ultra 9, RTX 4070 (16GB/1TB SSD)',
+    brand: 'ASUS',
+    category: 'laptops',
+    price: '₹1,79,990',
+    mrp: '₹2,14,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CV1D347R?tag=genztech019-21',
+    specScore: 9.4,
+    specs: {
+      processor: 'Intel Core Ultra 9 185H (16 Cores, 22 Threads)',
+      display: '16" 2.5K 240Hz 0.2ms ROG Nebula OLED (100% DCI-P3)',
+      gpu: 'NVIDIA GeForce RTX 4070 8GB GDDR6 (105W TGP)',
+      ramStorage: '16GB LPDDR5X | 1TB PCIe 4.0 NVMe',
+      weight: '1.85 kg CNC Aluminum Chassis',
+      battery: '90Wh High Capacity'
+    },
+    verdict: 'The thinnest, most elegant Windows gaming notebook, combining a breathtaking 240Hz OLED panel with RTX 4070 muscle.',
+    editorialReview: 'ASUS completely redesigned the Zephyrus G16 into a single-block CNC aluminum chassis that looks right at home in a client boardroom while tearing through AAA titles at 1440p ultra settings.',
+    pros: ['0.2ms response time 240Hz OLED with G-SYNC certification', 'Remarkably thin 1.49cm aluminum profile at just 1.85kg', 'Punchy 6-speaker acoustic setup with dual force-cancelling woofers'],
+    cons: ['Soldered LPDDR5X RAM prevents aftermarket memory expansion', 'Fan acoustics become prominent during Turbo TGP gaming profile'],
+    dealBadge: 'Top Tier Gaming Rig',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.6',
+    reviews: '890',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-lp-03',
+    slug: 'dell-xps-14-oled',
+    asin: 'B0CWL43W6C',
+    title: 'Dell XPS 14 (9440) Core Ultra 7 155H, 14.5" 3.2K OLED Touch, 16GB, 1TB SSD, RTX 4050',
+    brand: 'Dell',
+    category: 'laptops',
+    price: '₹1,64,990',
+    mrp: '₹1,89,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CWL43W6C?tag=genztech019-21',
+    specScore: 9.0,
+    specs: {
+      processor: 'Intel Core Ultra 7 155H (16 Cores, NPU AI Boost)',
+      display: '14.5" 3.2K (3200x2000) InfinityEdge 120Hz OLED Touch',
+      gpu: 'NVIDIA GeForce RTX 4050 6GB GDDR6',
+      ramStorage: '16GB LPDDR5x | 1TB NVMe Gen4 SSD',
+      weight: '1.68 kg CNC Machined Aluminum',
+      battery: '69.5Wh Battery with ExpressCharge'
+    },
+    verdict: 'Futuristic minimalist executive notebook with a seamless glass haptic touchpad and vivid 3.2K OLED touch display.',
+    editorialReview: 'The XPS 14 represents the boundary of modern industrial laptop architecture. Its invisible glass touchpad and capacitive function row look stunning, while dedicated RTX graphics assist AI workflows.',
+    pros: ['Breathtaking borderless 3.2K OLED touch display with 100% DCI-P3', 'Sensational seamless zero-lattice keyboard with crisp travel', 'Quiet dual-fan cooling tuned for office productivity'],
+    cons: ['Capacitive function key row lacks tactile physical press', 'Limited to 3 USB-C Thunderbolt 4 ports (requires dongle for USB-A)'],
+    dealBadge: 'Executive Ultrabook',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.4',
+    reviews: '640',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-lp-04',
+    slug: 'lenovo-legion-pro-5',
+    asin: 'B0C7SND67R',
+    title: 'Lenovo Legion Pro 5 Gen 8 AMD Ryzen 7 7745HX 16" WQXGA 240Hz, RTX 4060 (16GB/1TB SSD)',
+    brand: 'Lenovo',
+    category: 'laptops',
+    price: '₹1,24,990',
+    mrp: '₹1,58,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0C7SND67R?tag=genztech019-21',
+    specScore: 9.1,
+    specs: {
+      processor: 'AMD Ryzen 7 7745HX (8 Cores, 16 Threads, Up to 5.1GHz)',
+      display: '16" WQXGA (2560x1600) 240Hz 500 nits, 100% sRGB',
+      gpu: 'NVIDIA GeForce RTX 4060 8GB GDDR6 (Full 140W Max TGP)',
+      ramStorage: '16GB DDR5 5200MHz | 1TB PCIe 4.0 SSD (Expandable)',
+      weight: '2.5 kg Coldfront 5.0 Thermal Design',
+      battery: '80Wh with Super Rapid Charge Pro'
+    },
+    verdict: 'The benchmark for competitive gaming performance per rupee, offering full 140W GPU wattage and dual upgradable RAM slots.',
+    editorialReview: 'Lenovo does not throttle GPU wattage here—the RTX 4060 operates at its full 140W potential. The TrueStrike keyboard and 500-nit 240Hz matte screen provide competitive esports advantages.',
+    pros: ['Full 140W TGP graphics delivery without thermal throttling', 'Fully upgradable dual DDR5 RAM and M.2 SSD slots', 'Outstanding Coldfront 5.0 vapor-hybrid cooling system'],
+    cons: ['Heavy 300W charging power brick adds travel weight', 'Plastic trackpad surface feels slightly utilitarian'],
+    dealBadge: 'Best Esports Value',
+    isFestiveDeal: true,
+    isFeatured: false,
+    rating: '4.6',
+    reviews: '1,420',
+    createdAt: new Date().toISOString()
+  },
+
+  // 3. Audio (Earbuds & Headphones)
+  {
+    _id: 'prod-au-01',
+    slug: 'sony-wh-1000xm5',
+    asin: 'B09Y2LL45F',
+    title: 'Sony WH-1000XM5 Wireless Active Noise Cancelling Headphones - Black',
+    brand: 'Sony',
+    category: 'audio',
+    price: '₹25,990',
+    mrp: '₹34,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B09Y2LL45F?tag=genztech019-21',
+    specScore: 9.5,
+    specs: {
+      specialFeature: 'Dual Processor V1 + HD QN1 ANC (8 Microphones)',
+      battery: '30 Hours with ANC On (3 min charge = 3 hours playback)',
+      connectivity: 'Bluetooth 5.2 (LDAC, AAC, SBC, Multipoint 2 Devices)',
+      weight: '250g Soft Fit Synthetic Leather',
+      driver: '30mm Carbon Fiber Composite Driver'
+    },
+    verdict: 'The reigning champion of active noise cancellation, suppressing human speech and airplane cabin hum with surgical precision.',
+    editorialReview: 'With 8 microphones and two dedicated audio processors, the WH-1000XM5 creates a vacuum-like silence in noisy environments. The new 30mm carbon fiber driver provides clean instrument separation and tight bass response.',
+    pros: ['Undisputed class-leading active noise cancellation', 'Crystal-clear microphone calls with 4 beamforming sensors and AI reduction', 'Featherlight 250g earcups eliminate top-of-head fatigue'],
+    cons: ['Non-folding hinge design requires a larger travel case than XM4', 'Synthetic leather cups can generate warmth during warm summer walks'],
+    dealBadge: 'Top Noise Cancelling Headphone',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.5',
+    reviews: '9,120',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-au-02',
+    slug: 'apple-airpods-pro-2-usb-c',
+    asin: 'B0CHWRXH8B',
+    title: 'Apple AirPods Pro (2nd Generation) Wireless Earbuds with USB-C MagSafe Case',
+    brand: 'Apple',
+    category: 'audio',
+    price: '₹20,999',
+    mrp: '₹24,900',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CHWRXH8B?tag=genztech019-21',
+    specScore: 9.6,
+    specs: {
+      processor: 'Apple H2 Headphone Chip + U1 Case Chip',
+      specialFeature: 'Adaptive Audio, Transparency Mode, Personalized Spatial Audio',
+      battery: '6 Hours per bud (30 Hours total with USB-C Case)',
+      connectivity: 'Bluetooth 5.3 with Dynamic Head Tracking',
+      waterResistance: 'IP54 Dust & Sweat Resistant Earbuds and Case'
+    },
+    verdict: 'The absolute best true wireless earbuds for iPhone users, delivering supernatural transparency mode and seamless ecosystem handoff.',
+    editorialReview: 'The H2 chip recalculates environmental noise 48,000 times per second. Its Adaptive Audio blend mode automatically lets voice conversations through while filtering construction clatter seamlessly.',
+    pros: ['Unrivaled Transparency mode that sounds completely natural', 'Incredible Adaptive Audio feature regulates ambient roar dynamically', 'Lanyard loop and built-in Precision Finding speaker on USB-C case'],
+    cons: ['Advanced features (Head Tracking, Find My Precision) require iOS devices', 'Touch volume stems require slight tactile muscle memory adjustment'],
+    dealBadge: 'Best TWS for iOS',
+    isFestiveDeal: false,
+    isFeatured: true,
+    rating: '4.7',
+    reviews: '14,350',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-au-03',
+    slug: 'bose-quietcomfort-ultra',
+    asin: 'B0CD27L7NV',
+    title: 'Bose QuietComfort Ultra Wireless Noise Cancelling Headphones with Spatial Audio',
+    brand: 'Bose',
+    category: 'audio',
+    price: '₹34,900',
+    mrp: '₹39,900',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CD27L7NV?tag=genztech019-21',
+    specScore: 9.3,
+    specs: {
+      specialFeature: 'Bose Immersive Spatial Audio + CustomTune Technology',
+      battery: '24 Hours Playback (18 Hours with Immersive Audio)',
+      connectivity: 'Bluetooth 5.3 with Snapdragon Sound (aptX Adaptive)',
+      weight: '253g Foldable Metal Arm Structure',
+      charging: 'USB-C Fast Charging (15 min = 2.5 hours)'
+    },
+    verdict: 'Unmatched plush cloud comfort with revolutionary Bose Immersive Spatial Audio that works across any stereo audio source.',
+    editorialReview: 'Bose redefined physical headphone comfort with the QC Ultra. CustomTune calibrates the acoustic signature to the physical geometry of your ear canal each time you put them on.',
+    pros: ['Superb folding headband design tucks neatly into compact hard case', 'Supreme low-frequency rumble cancellation for frequent flyers', 'Bose Immersive Audio spatializes standard stereo tracks effortlessly'],
+    cons: ['Battery life drops to 18 hours when Immersive Audio is actively engaged', 'Bose Music app occasionally takes a moment to discover device upon cold boot'],
+    dealBadge: 'Most Comfortable Over-Ear',
+    isFestiveDeal: true,
+    isFeatured: false,
+    rating: '4.4',
+    reviews: '3,110',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-au-04',
+    slug: 'sennheiser-momentum-4',
+    asin: 'B0B6GHW1SX',
+    title: 'Sennheiser Momentum 4 Wireless ANC Headphones (60h Battery, Audiophile Sound)',
+    brand: 'Sennheiser',
+    category: 'audio',
+    price: '₹24,990',
+    mrp: '₹34,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0B6GHW1SX?tag=genztech019-21',
+    specScore: 9.1,
+    specs: {
+      driver: '42mm Audiophile-Inspired Transducer',
+      battery: 'Astounding 60 Hours Playback with ANC On',
+      connectivity: 'Bluetooth 5.2 (aptX Adaptive, AAC, SBC)',
+      weight: '293g Comfort Padded Headband',
+      specialFeature: 'Built-in 5-band Graphic Equalizer & Sound Personalization'
+    },
+    verdict: 'The undisputed battery endurance king with rich, nuanced acoustic separation for true music purists.',
+    editorialReview: 'While competitors offer 20 to 30 hours of battery life, Sennheiser squeezed an astounding 60 hours with ANC engaged into the Momentum 4, accompanied by signature German acoustic tuning.',
+    pros: ['Mind-boggling 60-hour real-world battery endurance', 'Dynamic, energetic 42mm soundstage with impactful, controlled sub-bass', 'Extensive customizable 5-band parametric EQ in companion app'],
+    cons: ['Active noise cancellation is slightly less aggressive than Sony XM5 in mids', 'Touch gesture controls can occasionally trigger when adjusting headband'],
+    dealBadge: 'Audiophile Battery King',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.5',
+    reviews: '4,670',
+    createdAt: new Date().toISOString()
+  },
+
+  // 4. Smartwatches
+  {
+    _id: 'prod-sw-01',
+    slug: 'apple-watch-ultra-2',
+    asin: 'B0CHX4MDGZ',
+    title: 'Apple Watch Ultra 2 [GPS + Cellular 49mm] Titanium Case with Trail Loop',
+    brand: 'Apple',
+    category: 'smartwatches',
+    price: '₹84,900',
+    mrp: '₹89,900',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CHX4MDGZ?tag=genztech019-21',
+    specScore: 9.7,
+    specs: {
+      processor: 'S9 SiP with 4-core Neural Engine',
+      display: '49mm Aerospace Titanium (3000 nits Sapphire Crystal)',
+      battery: '36 Hours Standard Use (Up to 72 Hours in Low Power)',
+      sensors: 'ECG, Blood Oxygen, Depth Gauge to 40m, Water Temperature',
+      connectivity: 'Precision Dual-Frequency L1 & L5 GPS + LTE Cellular',
+      waterResistance: '100m Water Resistance, EN13319 Dive Certified'
+    },
+    verdict: 'The ultimate adventure smartwatch with a blinding 3000-nit screen and pinpoint dual-frequency GPS accuracy.',
+    editorialReview: 'The Apple Watch Ultra 2 pairs severe endurance hardware with seamless smartwatch functionality. Its 3000-nit display remains legible even under blistering desert sunlight.',
+    pros: ['Blinding 3000-nit display is readable in direct harsh glare', 'Precision dual-frequency GPS tracks city marathons through skyscrapers', 'Double Tap finger pinch gesture enables one-handed task control'],
+    cons: ['49mm titanium chassis sits prominently on narrower wrists', 'Requires daily or bi-daily top-ups compared to dedicated sports watches'],
+    dealBadge: 'Ultimate Adventure Watch',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.8',
+    reviews: '3,890',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-sw-02',
+    slug: 'samsung-galaxy-watch-6-classic',
+    asin: 'B0CC5G7V6J',
+    title: 'Samsung Galaxy Watch 6 Classic (47mm, Bluetooth, Black) with Rotating Bezel',
+    brand: 'Samsung',
+    category: 'smartwatches',
+    price: '₹27,999',
+    mrp: '₹39,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CC5G7V6J?tag=genztech019-21',
+    specScore: 9.0,
+    specs: {
+      processor: 'Exynos W930 Dual Core 1.4GHz',
+      display: '1.5" Super AMOLED 480x480 (Sapphire Crystal Glass)',
+      sensors: 'BioActive Sensor (Optical Heart + ECG + BIA Body Composition)',
+      battery: '425 mAh (Fast Wireless Charging)',
+      specialFeature: 'Mechanical Physical Rotating Bezel Navigation',
+      os: 'Wear OS Powered by Samsung (One UI 5 Watch)'
+    },
+    verdict: 'The most satisfying navigation experience on Android, featuring a tactile mechanical rotating bezel and body composition analysis.',
+    editorialReview: 'Samsung revived the beloved physical rotating bezel on the Watch 6 Classic. Navigating through notification cards and workouts with mechanical clicks is significantly more intuitive than smudging glass.',
+    pros: ['Tactile mechanical rotating bezel provides effortless menu navigation', 'Bioelectrical Impedance Analysis (BIA) calculates body fat and skeletal muscle', 'Vibrant Super AMOLED display protected by scratch-resistant Sapphire glass'],
+    cons: ['ECG and blood pressure monitoring require a paired Samsung Galaxy smartphone', 'Real-world battery longevity averages 30 to 40 hours with Always-On display'],
+    dealBadge: 'Top Android Classic',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.3',
+    reviews: '4,120',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-sw-03',
+    slug: 'garmin-fenix-7-pro-solar',
+    asin: 'B0C5C4Y49K',
+    title: 'Garmin Fenix 7 Pro Solar (47mm Multisport GPS Watch, Built-in LED Flashlight)',
+    brand: 'Garmin',
+    category: 'smartwatches',
+    price: '₹84,990',
+    mrp: '₹94,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0C5C4Y49K?tag=genztech019-21',
+    specScore: 9.5,
+    specs: {
+      display: '1.3" Sunlight-Visible Transflective Memory-in-Pixel (MIP)',
+      battery: 'Up to 22 Days in Smartwatch Mode with Solar Power',
+      sensors: 'Elevate Gen 5 Heart Rate, Multi-Band GNSS with SatIQ, Pulse Ox',
+      specialFeature: 'Built-in Multi-LED Flashlight & TopoActive Mapping',
+      waterResistance: '10 ATM (100 Meters Pressure Tested)'
+    },
+    verdict: 'The undisputed marathoner tool, featuring multi-week solar battery life and tactical built-in flashlight utility.',
+    editorialReview: 'For ultramarathon runners, triathletes, and hikers, the Garmin Fenix 7 Pro Solar is peerless. The transflective MIP display gets clearer the brighter the sun shines, and multi-band SatIQ GPS accuracy is clinical.',
+    pros: ['Phenomenal 22-day battery life with daily solar top-up capability', 'Remarkably useful built-in multi-mode LED flashlight', 'Unrivaled training readiness metrics, VO2 max, and grade-adjusted pacing'],
+    cons: ['Transflective MIP display prioritizes battery and outdoor contrast over high-res smartwatch animations', 'Complex analytics ecosystem carries a steep learning curve for casual runners'],
+    dealBadge: 'Pro Athlete Endurance',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.7',
+    reviews: '1,890',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-sw-04',
+    slug: 'oneplus-watch-2',
+    asin: 'B0CV74L8YJ',
+    title: 'OnePlus Watch 2 (Black Steel, 100-Hour Battery Life, Dual-Engine Architecture)',
+    brand: 'OnePlus',
+    category: 'smartwatches',
+    price: '₹22,999',
+    mrp: '₹27,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1510017803434-a899398421b3?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CV74L8YJ?tag=genztech019-21',
+    specScore: 8.9,
+    specs: {
+      processor: 'Snapdragon W5 Gen 1 + BES2700 Dual-Engine Chips',
+      display: '1.43" AMOLED 466x466 (60Hz, 1000 nits, Sapphire Crystal)',
+      battery: '500 mAh (100 Hours Smart Mode, 12 Days Power Saver)',
+      sensors: 'Dual-Frequency L1+L5 GPS, Optical Pulse Rate, SpO2, Sleep Tracking',
+      os: 'Wear OS 4 by Google + RTOS Coprocessor',
+      weight: '49g Stainless Steel Chassis'
+    },
+    verdict: 'Solved the Wear OS battery dilemma with ingenious dual-chip architecture, delivering a true 4-day battery cycle.',
+    editorialReview: 'By offloading background sensor checks to an ultra-efficient RTOS coprocessor and engaging Snapdragon W5 only when tapping interactive Wear OS apps, OnePlus delivered an honest 100-hour battery experience.',
+    pros: ['Genuine 4-day (100-hour) battery life while running full Google Wear OS', 'Blazing 7.5W VOOC fast charging reaches full recharge in 45 minutes', 'Premium stainless steel chassis crowned with scratchproof sapphire crystal'],
+    cons: ['Does not support cellular LTE connectivity', 'Crown rotates freely without scrolling software items'],
+    dealBadge: 'Battery Breakthrough',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.4',
+    reviews: '2,430',
+    createdAt: new Date().toISOString()
+  },
+
+  // 5. Gaming
+  {
+    _id: 'prod-gm-01',
+    slug: 'playstation-5-slim',
+    asin: 'B0CY5QW6M3',
+    title: 'Sony PlayStation 5 Console Slim (Digital & Disc Edition with 1TB SSD)',
+    brand: 'Sony',
+    category: 'gaming',
+    price: '₹54,990',
+    mrp: '₹54,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CY5QW6M3?tag=genztech019-21',
+    specScore: 9.6,
+    specs: {
+      processor: 'Custom AMD Zen 2 (8 Cores, 3.5GHz) + RDNA 2 GPU (10.3 TFLOPS)',
+      ramStorage: '16GB GDDR6 | 1TB Custom Ultra-High Speed NVMe SSD',
+      display: '4K 120Hz Output, 8K Support, Variable Refresh Rate (VRR)',
+      specialFeature: 'Tempest 3D AudioTech + DualSense Haptic Feedback & Adaptive Triggers',
+      connectivity: 'HDMI 2.1, Wi-Fi 6, 2x USB-C Front Ports'
+    },
+    verdict: 'The definitive home console for cinematic story-driven single-player epics, powered by revolutionary DualSense haptics.',
+    editorialReview: 'The PS5 Slim trims down console volume by over 30% while bumping usable internal storage to a full 1TB. Games like Spider-Man 2 and God of War Ragnarok showcase its instantaneous SSD loading speeds.',
+    pros: ['DualSense adaptive triggers and nuanced haptic feedback enhance gameplay immersion', 'Sublime lineup of acclaimed first-party PlayStation studio titles', 'User-accessible M.2 NVMe expansion slot supports standard fast PC SSDs'],
+    cons: ['Vertical orientation stand is sold separately in retail package', '1TB storage fills quickly when installing multiple modern AAA game titles'],
+    dealBadge: 'Editor Choice Console',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.8',
+    reviews: '12,980',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-gm-02',
+    slug: 'steam-deck-oled',
+    asin: 'B0CP27H9P1',
+    title: 'Valve Steam Deck OLED (1TB NVMe SSD, 7.4" 90Hz HDR OLED, Custom APU)',
+    brand: 'Valve',
+    category: 'gaming',
+    price: '₹64,999',
+    mrp: '₹74,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0CP27H9P1?tag=genztech019-21',
+    specScore: 9.4,
+    specs: {
+      processor: '6nm AMD "Sephiroth" APU (Zen 2 + RDNA 2)',
+      display: '7.4" 1280x800 90Hz HDR OLED (1000 nits Peak HDR)',
+      ramStorage: '16GB LPDDR5 6400 MT/s | 1TB High Speed NVMe',
+      battery: '50Wh Battery (3 to 12 Hours Gameplay)',
+      weight: '640g Ergonomic Handheld Grip with Dual Trackpads',
+      os: 'SteamOS 3.5 (Arch Linux Based)'
+    },
+    verdict: 'The gold standard in handheld PC gaming, featuring a peerless 90Hz HDR OLED and console-like instant sleep/resume.',
+    editorialReview: 'Valve perfected the handheld gaming PC with the Steam Deck OLED. The 90Hz OLED panel brings infinite contrast ratios and wide HDR color gamut, while power consumption drops significantly thanks to 6nm silicon.',
+    pros: ['Sublime 90Hz HDR OLED panel brings breathtaking blacks and vibrant colors', 'Console-like instant sleep and wake suspension handles PC games effortlessly', 'Twin tactile haptic trackpads provide desktop mouse precision in tactical titles'],
+    cons: ['Non-Steam anti-cheat games (e.g., Fortnite, Valorant) require Windows dual-boot', 'Larger form factor than Nintendo Switch requires two-handed grip'],
+    dealBadge: 'Best Handheld PC',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.9',
+    reviews: '1,450',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-gm-03',
+    slug: 'asus-rog-ally-x',
+    asin: 'B0D6F5Q99R',
+    title: 'ASUS ROG Ally X (2024) 7" 120Hz FHD, AMD Ryzen Z1 Extreme (24GB RAM / 1TB SSD)',
+    brand: 'ASUS',
+    category: 'gaming',
+    price: '₹89,990',
+    mrp: '₹99,990',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1592840496694-26d035b52b48?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0D6F5Q99R?tag=genztech019-21',
+    specScore: 9.3,
+    specs: {
+      processor: 'AMD Ryzen Z1 Extreme (8 Cores, 16 Threads, 8.6 TFLOPS)',
+      display: '7" FHD (1920x1080) 120Hz 7ms IPS (FreeSync Premium, 500 nits)',
+      ramStorage: '24GB LPDDR5X 7500MHz | 1TB M.2 2280 NVMe SSD',
+      battery: 'Massive 80Wh Battery (Double the original Ally)',
+      connectivity: '2x USB-C (Thunderbolt 4 compatible), MicroSD UHS-II Slot',
+      os: 'Windows 11 Home with Armoury Crate SE'
+    },
+    verdict: 'The ultimate Windows handheld beast with a monstrous 80Wh battery, 24GB high-speed memory, and full game library compatibility.',
+    editorialReview: 'ASUS addressed every piece of community feedback with the ROG Ally X. Doubling battery capacity to 80Wh and upgrading RAM to 24GB enables sustained 1080p high-refresh gaming on Game Pass, Epic, and Steam.',
+    pros: ['Colossal 80Wh battery provides double the runtime of most Windows handhelds', '24GB high-speed RAM eliminates memory bottlenecks in modern ports', 'Standard full-size M.2 2280 SSD slot allows easy storage upgrades up to 4TB'],
+    cons: ['Windows 11 UI on a 7-inch touch screen occasionally demands stylus or thumb precision', 'Price tag encroaches into mid-tier gaming laptop territory'],
+    dealBadge: 'Windows Powerhouse Handheld',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.5',
+    reviews: '920',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-gm-04',
+    slug: 'nintendo-switch-oled',
+    asin: 'B098RK513Y',
+    title: 'Nintendo Switch OLED Model - Neon Blue & Neon Red Joy-Con',
+    brand: 'Nintendo',
+    category: 'gaming',
+    price: '₹28,499',
+    mrp: '₹34,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B098RK513Y?tag=genztech019-21',
+    specScore: 8.9,
+    specs: {
+      processor: 'NVIDIA Custom Tegra Processor',
+      display: '7.0" Multi-Touch OLED Screen (1280x720 Handheld, 1080p Docked)',
+      battery: '4310 mAh (4.5 to 9 Hours Runtime)',
+      ramStorage: '64GB Internal Storage (MicroSD Expandable up to 2TB)',
+      specialFeature: 'Wide Adjustable Kickstand, Enhanced Onboard Audio, Wired LAN Dock',
+      weight: '420g with Joy-Con Controllers Attached'
+    },
+    verdict: 'Timeless Nintendo masterpiece library playable on a gorgeous 7-inch vibrant OLED screen wherever you travel.',
+    editorialReview: 'The Switch OLED provides the best way to experience Zelda: Tears of the Kingdom, Mario Wonder, and Pokemon. Its 7-inch OLED panel exhibits rich ink blacks and vibrant saturation.',
+    pros: ['Incomparable library of timeless, family-friendly Nintendo first-party games', 'Vibrant 7-inch OLED screen transforms colorful art styles in handheld mode', 'Detachable Joy-Cons enable instant two-player tabletop multiplayer on planes'],
+    cons: ['Tegra processor struggles with complex third-party multi-platform ports', '720p handheld resolution looks soft compared to modern 1080p handhelds'],
+    dealBadge: 'Family & Co-op Pick',
+    isFestiveDeal: true,
+    isFeatured: false,
+    rating: '4.7',
+    reviews: '28,100',
+    createdAt: new Date().toISOString()
+  },
+
+  // 6. Accessories
+  {
+    _id: 'prod-ac-01',
+    slug: 'logitech-mx-master-3s',
+    asin: 'B09T3N147G',
+    title: 'Logitech MX Master 3S - Wireless Performance Mouse with Quiet Clicks, 8K DPI Sensor',
+    brand: 'Logitech',
+    category: 'accessories',
+    price: '₹8,995',
+    mrp: '₹10,995',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1615663245857-ac1eeb536fcb?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B09T3N147G?tag=genztech019-21',
+    specScore: 9.7,
+    specs: {
+      sensor: 'Darkfield 8,000 DPI (Tracks on Any Surface including Glass)',
+      scrollWheel: 'MagSpeed Electromagnetic Scrolling (1,000 Lines per Second)',
+      clicks: 'Quiet Click Switches (90% Acoustic Noise Reduction)',
+      connectivity: 'Bluetooth Low Energy + Logi Bolt USB Receiver (3 Devices)',
+      battery: '500 mAh (Up to 70 Days on Full Charge, USB-C Quick Charge)'
+    },
+    verdict: 'The undisputed productivity mouse of the decade, featuring frictionless MagSpeed electromagnetic scrolling and whisper-quiet clicks.',
+    editorialReview: 'Every programmer, designer, and spreadsheet warrior owes it to their wrist to experience the MX Master 3S. The MagSpeed wheel spins silently past thousands of lines of code in seconds.',
+    pros: ['MagSpeed electromagnetic scroll wheel spins 1,000 lines/sec frictionlessly', '8,000 DPI Darkfield sensor tracks reliably even on clear glass desk surfaces', 'Whisper-quiet acoustic switches maintain tactile click feedback without clicking noise'],
+    cons: ['Ergonomic thumb wing design is exclusively crafted for right-handed users', 'Heavier 141g mass is tailored for productivity workflows rather than fast Twitch FPS games'],
+    dealBadge: 'Productivity Legend',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.6',
+    reviews: '14,021',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-ac-02',
+    slug: 'keychron-q1-pro-wireless-custom-keyboard',
+    asin: 'B0C7LMR5Q2',
+    title: 'Keychron Q1 Pro QMK/VIA Wireless Custom Mechanical Keyboard (75% Layout, CNC Aluminum)',
+    brand: 'Keychron',
+    category: 'accessories',
+    price: '₹17,999',
+    mrp: '₹21,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0C7LMR5Q2?tag=genztech019-21',
+    specScore: 9.4,
+    specs: {
+      layout: '75% Compact Layout with Programmable Rotary Encoder Knob',
+      chassis: 'Full CNC Machined 6063 Aluminum Solid Body',
+      switches: 'Keychron K Pro Red Mechanical (Hot-Swappable 3-pin & 5-pin)',
+      connectivity: 'Bluetooth 5.1 (3 Devices) + Type-C Wired (1000Hz Polling)',
+      specialFeature: 'Double-Gasket Design, Screw-In PCB Stabilizers, QMK/VIA Key Remap'
+    },
+    verdict: 'Studio-grade typing acoustic profile with full custom CNC aluminum chassis, hot-swap flexibility, and wireless Bluetooth freedom.',
+    editorialReview: 'The Keychron Q1 Pro bridges the custom mechanical keyboard enthusiast world with retail accessibility. The double-gasket acoustic mounting produces a deeply satisfying, cushioned typing experience.',
+    pros: ['Hefty 1.7kg CNC machined 6063 aluminum chassis anchors steadfastly to desk', 'Double-gasket silicone mounting absorbs vibration for signature deep thock acoustics', 'Full web-based QMK/VIA firmware remapping allows infinite macro programming'],
+    cons: ['High-profile front lip encourages pairing with a dedicated wrist rest', 'Bluetooth battery longevity reduces to ~90 hours when South-facing RGB is maxed'],
+    dealBadge: 'Enthusiast Keyboard',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.7',
+    reviews: '850',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-ac-03',
+    slug: 'anker-prime-20000mah-power-bank',
+    asin: 'B0BYP2F3SG',
+    title: 'Anker Prime 20,000mAh Power Bank (200W Output, Smart Digital Display, 3 Ports)',
+    brand: 'Anker',
+    category: 'accessories',
+    price: '₹11,999',
+    mrp: '₹14,999',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1609592807693-79a7852c9287?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B0BYP2F3SG?tag=genztech019-21',
+    specScore: 9.5,
+    specs: {
+      capacity: '20,000 mAh (72Wh - Airline Carry-On Approved)',
+      output: '200W Total Combined Output (Single Port up to 100W PD 3.0)',
+      ports: '2x USB-C Power Delivery + 1x USB-A Fast Charge',
+      display: 'Smart TFT Color Display (Shows Real-Time Watts, Temp, Battery Health)',
+      charging: '100W High Speed Recharge (Refuels from 0 to 100% in 1 hour 15 min)'
+    },
+    verdict: 'The ultimate travel charger, capable of fast-charging two laptops simultaneously with full real-time telemetry on a color screen.',
+    editorialReview: 'Anker revolutionized the humble portable power brick. The real-time smart screen shows live wattage flowing through each port, estimated completion time, and individual cell temperature.',
+    pros: ['Blistering 200W total power can fast-charge two 14-inch MacBooks concurrently', 'Informative color display provides transparent diagnostics on live input/output wattage', 'Sub-75 minute full recharge when connected to a 100W wall adapter'],
+    cons: ['Weight of 540 grams is noticeable in jacket pockets', 'Glossy front display acrylic is prone to hairline cosmetic scratches'],
+    dealBadge: 'Best Laptop Power Bank',
+    isFestiveDeal: true,
+    isFeatured: true,
+    rating: '4.8',
+    reviews: '3,240',
+    createdAt: new Date().toISOString()
+  },
+  {
+    _id: 'prod-ac-04',
+    slug: 'sandisk-extreme-pro-1tb-portable-ssd',
+    asin: 'B08GTYFC37',
+    title: 'SanDisk Extreme PRO 1TB Portable SSD - Up to 2000MB/s, USB-C, IP55 Water/Dust Resistance',
+    brand: 'SanDisk',
+    category: 'accessories',
+    price: '₹13,499',
+    mrp: '₹22,000',
+    priceMode: 'indicative',
+    priceLastVerified: new Date().toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=800&auto=format&fit=crop',
+    affiliateUrl: 'https://www.amazon.in/dp/B08GTYFC37?tag=genztech019-21',
+    specScore: 9.3,
+    specs: {
+      speed: 'Up to 2000MB/s Read & Write (USB 3.2 Gen 2x2 NVMe Architecture)',
+      durability: 'IP55 Water & Dust Resistance, 3-Meter Drop Protection',
+      chassis: 'Forged Aluminum Core with Ruggedized Protective Silicone Shell',
+      security: 'Hardware 256-bit AES Encryption with Password Protection',
+      compatibility: 'Mac, Windows, iPadOS, Android, and Blackmagic Cinema Cameras'
+    },
+    verdict: 'Blazing 2000MB/s sustained throughput enclosed in a rugged carabiner loop design ready for field shooting.',
+    editorialReview: 'Videographers and content creators working with ProRes 4K footage rely on the Extreme PRO. Its forged aluminum core acts as a heatsink to maintain sustained multi-gigabyte transfer speeds without thermal drops.',
+    pros: ['Blazing 2000MB/s read/write transfers handle 4K 120fps video streams easily', 'IP55 water/dust resistance and 3-meter drop resistance protects field footage', 'Integrated carabiner loop secures cleanly to camera bag backpacks'],
+    cons: ['Achieving maximum 2000MB/s requires a USB 3.2 Gen 2x2 host controller', 'Silicone rubber shell picks up pocket lint over prolonged everyday carry'],
+    dealBadge: 'Rugged Creator Storage',
+    isFestiveDeal: false,
+    isFeatured: false,
+    rating: '4.6',
+    reviews: '18,500',
+    createdAt: new Date().toISOString()
+  }
+];
+
+export const INITIAL_BUYING_GUIDES: BuyingGuide[] = [
+  {
+    _id: 'guide-01',
+    slug: 'ultimate-gaming-laptop-buying-guide-2026',
+    title: 'The Ultimate Gaming Laptop Buying Guide (2026 Edition)',
+    subtitle: 'GPU TGP Wattage, OLED vs IPS Panels, Thermal Throttling & RAM Expansion Explained',
+    excerpt: 'Do not get fooled by marketing buzzwords. Here is the technical breakdown of what actually determines frame rates, panel latency, and cooling performance in modern gaming laptops.',
+    category: 'laptops',
+    readTime: '8 min read',
+    author: 'Aarav Sharma',
+    authorRole: 'Hardware Testing Lead',
+    publishedAt: '2026-09-20',
+    heroImage: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=1200&auto=format&fit=crop',
+    recommendedProductIds: ['prod-lp-02', 'prod-lp-04'],
+    content: `
+### Why GPU Wattage (TGP) Matters More Than the Model Number
+When evaluating a modern RTX 40-series gaming laptop, looking solely at the GPU model (e.g., RTX 4060 vs RTX 4070) can be deceptive. NVIDIA allows laptop manufacturers to configure Total Graphics Power (TGP) anywhere between 45W and 140W for the same silicon. A fully unlocked 140W RTX 4060 will consistently outperform a restricted 65W RTX 4070 in sustained gaming loads due to thermal and power headroom.
+
+Before clicking purchase, always check the manufacturer spec sheet for maximum TGP plus Dynamic Boost wattage. In our testing lab, laptops providing at least 115W+ delivered stable 1% low frame rates without jarring micro-stutters during heavy combat sequences.
+
+---
+
+### OLED vs Fast IPS: Which Screen Technology Wins for Esports?
+In 2026, high-refresh OLED panels have finally achieved mainstream adoption in gaming notebooks. Here is how they compare against traditional fast IPS screens:
+
+| Metric | ROG Nebula OLED (240Hz) | Competitive Fast IPS (240Hz) |
+|---|---|---|
+| **Pixel Response Time** | **0.2ms (Zero Ghosting)** | 3ms to 5ms GtG |
+| **Contrast Ratio** | **1,000,000:1 (True Black)** | 1,000:1 to 1,200:1 |
+| **Outdoor / Bright Room Glare** | Glossy (Reflective) | **Matte Anti-Glare Coating** |
+| **Power Consumption** | Variable based on scene | Fixed backlight draw |
+
+If you primarily play cinematic narrative titles (Cyberpunk 2077, Alan Wake 2, Black Myth: Wukong), an OLED display is transformative. However, if you play competitive CS2 or Valorant under bright office spotlights, a matte 500-nit fast IPS panel avoids eye-straining reflections.
+    `
+  },
+  {
+    _id: 'guide-02',
+    slug: 'flagship-smartphone-camera-breakdown',
+    title: 'Flagship Smartphone Camera Shootout: 1-Inch Sensors vs Computational AI',
+    subtitle: 'Understanding Dynamic Range, Periscope Optical Prisms & Real Low-Light Physics',
+    excerpt: 'Megapixels are a vanity metric. Discover why sensor physical dimensions, aperture glass optics, and multi-frame RAW stacking dictate true mobile photography superiority.',
+    category: 'smartphones',
+    readTime: '10 min read',
+    author: 'Priya Nambiar',
+    authorRole: 'Imaging & Sensor Analyst',
+    publishedAt: '2026-09-18',
+    heroImage: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=1200&auto=format&fit=crop',
+    recommendedProductIds: ['prod-sp-01', 'prod-sp-02', 'prod-sp-03'],
+    content: `
+### The Megapixel Trap: Why Sensor Surface Area Rules
+Smartphone marketing often boasts about 108MP or 200MP sensors, but real-world optical quality is primarily governed by sensor surface area and pixel pitch. When 200 million pixels are crammed onto a tiny smartphone sensor, each individual photosite can capture very little light.
+
+To compensate, smartphones employ pixel-binning (e.g., combining 16 pixels into one 12.5MP super-pixel). While computational algorithms have improved, nothing replaces larger native optics when it comes to shallow depth-of-field and organic optical bokeh.
+
+---
+
+### Periscope Optical Prisms vs Digital Cropping
+Zoom lenses on modern phones utilize a folded periscope prism where light bends 90 degrees inside the phone body, allowing the lens elements to travel along the length of the device rather than pushing out from the back.
+
+- **3x Telephoto:** Best suited for flattering 75mm portrait perspectives without distorting facial proportions.
+- **5x Tetraprism (Apple / Google):** Excellent versatility for architectural details and concert framing.
+- **10x / 100x Space Zoom (Samsung):** Exceptional for long-range wildlife and landscape framing, supported by generative super-resolution enhancement.
+    `
+  },
+  {
+    _id: 'guide-03',
+    slug: 'active-noise-cancelling-anc-deep-dive',
+    title: 'Active Noise Cancellation (ANC) Demystified: Physics, Microphones & Comfort',
+    subtitle: 'How Phase Inversion Neutralizes Engine Roar and Why Passive Seal Still Dictates Half the Battle',
+    excerpt: 'Curious why some ANC headphones eliminate subway rumble while struggling with nearby colleagues talking? Here is how phase cancellation works and what to inspect before buying.',
+    category: 'audio',
+    readTime: '7 min read',
+    author: 'Vikram Joshi',
+    authorRole: 'Acoustic Engineer',
+    publishedAt: '2026-09-15',
+    heroImage: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=1200&auto=format&fit=crop',
+    recommendedProductIds: ['prod-au-01', 'prod-au-02', 'prod-au-03'],
+    content: `
+### How Phase Inversion Works in Practice
+Active Noise Cancellation relies on destructive acoustic wave interference. External feedback and feedforward microphones detect incoming ambient sound pressure waves. The onboard DSP instantly synthesizes an identical soundwave inverted by 180 degrees (anti-phase sound). When the original noise wave meets the anti-phase wave, the positive and negative amplitudes cancel each other out before reaching your eardrums.
+
+---
+
+### Why Low Frequencies Cancel Better Than Human Voices
+Low-frequency sounds (such as the 60Hz to 200Hz drone of an aircraft turbine, train tracks, or air conditioning fans) feature long, predictable waveforms that give the onboard DSP time to compute and invert the signal.
+
+In contrast, human conversation and crying babies are irregular and encompass higher frequencies with short, erratic wavelengths. This is where physical ear cup seal (passive noise isolation) and memory foam density remain just as critical as digital processing.
+    `
+  },
+  {
+    _id: 'guide-04',
+    slug: 'smartwatch-health-sensors-accuracy-guide',
+    title: 'Smartwatch Health Sensors Decoded: ECG, Optical Photoplethysmography & Dual-Band GPS',
+    subtitle: 'Separating Clinical Precision from Gimmicks in Modern Wrist Wearables',
+    excerpt: 'Can a smartwatch truly detect cardiac arrhythmias, estimate VO2 max, or accurately track urban runs through concrete skyscraper canyons? Here is the clinical and hardware truth.',
+    category: 'smartwatches',
+    readTime: '9 min read',
+    author: 'Dr. Ananya Roy',
+    authorRole: 'Digital Health & Biometrics Contributor',
+    publishedAt: '2026-09-12',
+    heroImage: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=1200&auto=format&fit=crop',
+    recommendedProductIds: ['prod-sw-01', 'prod-sw-03'],
+    content: `
+### Understanding Single-Lead Wrist ECG vs 12-Lead Clinical ECG
+Modern smartwatches (such as Apple Watch Series/Ultra and Galaxy Watch Classic) feature titanium or ceramic electrode rings on the back case and crown. When you hold your finger against the crown, you complete an electrical circuit across your chest, recording a single-lead Lead I electrocardiogram.
+
+While a single-lead ECG is FDA-cleared and CDSCO-approved to recognize Atrial Fibrillation (Afib) and irregular rhythm, it cannot detect an acute heart attack. It serves as an early-warning telemetry log that you can export as a PDF to present to your cardiologist.
+
+---
+
+### Dual-Band L1 + L5 GNSS Satellite Tracking
+Traditional GPS watches rely strictly on the legacy L1 civilian frequency, which easily reflects off skyscrapers, canyon walls, and dense rainforest canopies, creating zig-zagging map errors.
+
+Dual-frequency smartwatches listen simultaneously to the newer L5 frequency broadcast by modern GPS satellites. The receiver correlates both signals to calculate pinpoint coordinates within a 2-meter radius, ensuring marathon runners and hikers receive true pace metrics.
+    `
+  }
+];

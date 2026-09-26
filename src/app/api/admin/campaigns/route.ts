@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const created = addCampaign(body);
-    syncCampaignToAtlas(created).catch(() => {});
+    await syncCampaignToAtlas(created);
     return NextResponse.json(created, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -42,7 +42,7 @@ export async function PUT(req: Request) {
     if (!updated) {
       return NextResponse.json({ error: 'Campaign not found' }, { status: 404 });
     }
-    syncCampaignToAtlas(updated).catch(() => {});
+    await syncCampaignToAtlas(updated);
     return NextResponse.json(updated);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -60,7 +60,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Campaign id is required' }, { status: 400 });
     }
     deleteCampaign(id);
-    deleteCampaignFromAtlas(id).catch(() => {});
+    await deleteCampaignFromAtlas(id);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

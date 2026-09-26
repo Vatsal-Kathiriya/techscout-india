@@ -22,7 +22,7 @@ export async function PUT(req: Request) {
   try {
     const body = await req.json();
     const updated = saveSiteConfig(body);
-    syncConfigToAtlas(updated).catch(() => {});
+    await syncConfigToAtlas(updated);
     return NextResponse.json(updated);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

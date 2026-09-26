@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const created = addGuide(body);
-    syncGuideToAtlas(created).catch(() => {});
+    await syncGuideToAtlas(created);
     return NextResponse.json(created, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -43,7 +43,7 @@ export async function PUT(req: Request) {
     if (!updated) {
       return NextResponse.json({ error: 'Guide not found' }, { status: 404 });
     }
-    syncGuideToAtlas(updated).catch(() => {});
+    await syncGuideToAtlas(updated);
     return NextResponse.json(updated);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -61,7 +61,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Guide id is required' }, { status: 400 });
     }
     deleteGuide(id);
-    deleteGuideFromAtlas(id).catch(() => {});
+    await deleteGuideFromAtlas(id);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -35,8 +35,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    // Persist to MongoDB Atlas asynchronously
-    syncProductToAtlas(updatedProduct).catch(() => {});
+    // Persist to MongoDB Atlas
+    await syncProductToAtlas(updatedProduct);
 
     return NextResponse.json(updatedProduct);
   } catch (error: any) {
@@ -53,8 +53,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const { id } = await params;
 
     deleteProduct(id);
-    // Delete from MongoDB Atlas asynchronously
-    deleteProductFromAtlas(id).catch(() => {});
+    // Delete from MongoDB Atlas
+    await deleteProductFromAtlas(id);
 
     return NextResponse.json({ message: 'Product deleted successfully' });
   } catch (error: any) {

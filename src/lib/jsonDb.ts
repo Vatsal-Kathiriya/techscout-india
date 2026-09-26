@@ -19,12 +19,36 @@ const configPath = path.join(process.cwd(), 'site-config.json');
 const campaignsPath = path.join(process.cwd(), 'campaigns.json');
 const siteDataExportPath = path.join(process.cwd(), 'public', 'site-data.json');
 
+// In serverless hosting (Netlify/Vercel/AWS Lambda), the file system is read-only (/var/task).
+// safeWriteFile gracefully ignores EROFS errors so mutations don't crash.
+function safeWriteFile(filePath: string, data: string) {
+  try {
+    fs.writeFileSync(filePath, data);
+  } catch (err: any) {
+    if (err.code === 'EROFS' || err.message?.includes('read-only')) {
+      // Expected in serverless environments. Data is persisted to MongoDB Atlas directly.
+      return;
+    }
+    console.warn(`[jsonDb] Could not write to ${filePath}:`, err.message);
+  }
+}
+
+// In-memory runtime cache for serverless environments
+let memoryProducts: Product[] | null = null;
+let memoryGuides: BuyingGuide[] | null = null;
+let memoryCampaigns: FestiveCampaign[] | null = null;
+let memoryConfig: SiteConfig | null = null;
+
 // --- PRODUCTS ---
 export function getProducts(): Product[] {
+  if (memoryProducts && memoryProducts.length > 0) {
+    return memoryProducts;
+  }
   try {
     if (!fs.existsSync(productsPath)) {
-      fs.writeFileSync(productsPath, JSON.stringify(INITIAL_PRODUCTS, null, 2));
-      return INITIAL_PRODUCTS;
+      safeWriteFile(productsPath, JSON.stringify(INITIAL_PRODUCTS, null, 2));
+      memoryProducts = [...INITIAL_PRODUCTS];
+      return memoryProducts;
     }
     const data = fs.readFileSync(productsPath, 'utf8');
     const parsed = JSON.parse(data);
@@ -35,12 +59,14 @@ export function getProducts(): Product[] {
       const existingAsins = new Set(list.map((p) => p.asin));
       const missing = INITIAL_PRODUCTS.filter((p) => !existingAsins.has(p.asin));
       list = [...list, ...missing];
-      fs.writeFileSync(productsPath, JSON.stringify(list, null, 2));
+      safeWriteFile(productsPath, JSON.stringify(list, null, 2));
     }
-    return list;
+    memoryProducts = list;
+    return memoryProducts;
   } catch (err) {
     console.error('getProducts error:', err);
-    return INITIAL_PRODUCTS;
+    memoryProducts = [...INITIAL_PRODUCTS];
+    return memoryProducts;
   }
 }
 
@@ -55,7 +81,8 @@ export function getProductBySlug(slug: string): Product | null {
 }
 
 export function saveProducts(products: Product[]) {
-  fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+  memoryProducts = products;
+  safeWriteFile(productsPath, JSON.stringify(products, null, 2));
 }
 
 export function addProduct(product: Partial<Product>): Product {
@@ -122,15 +149,21 @@ export function deleteProduct(id: string) {
 
 // --- GUIDES ---
 export function getGuides(): BuyingGuide[] {
+  if (memoryGuides && memoryGuides.length > 0) {
+    return memoryGuides;
+  }
   try {
     if (!fs.existsSync(guidesPath)) {
-      fs.writeFileSync(guidesPath, JSON.stringify(INITIAL_BUYING_GUIDES, null, 2));
-      return INITIAL_BUYING_GUIDES;
+      safeWriteFile(guidesPath, JSON.stringify(INITIAL_BUYING_GUIDES, null, 2));
+      memoryGuides = [...INITIAL_BUYING_GUIDES];
+      return memoryGuides;
     }
     const data = fs.readFileSync(guidesPath, 'utf8');
-    return JSON.parse(data);
+    memoryGuides = JSON.parse(data);
+    return memoryGuides || INITIAL_BUYING_GUIDES;
   } catch (err) {
-    return INITIAL_BUYING_GUIDES;
+    memoryGuides = [...INITIAL_BUYING_GUIDES];
+    return memoryGuides;
   }
 }
 
@@ -140,7 +173,8 @@ export function getGuideBySlug(slug: string): BuyingGuide | null {
 }
 
 export function saveGuides(guides: BuyingGuide[]) {
-  fs.writeFileSync(guidesPath, JSON.stringify(guides, null, 2));
+  memoryGuides = guides;
+  safeWriteFile(guidesPath, JSON.stringify(guides, null, 2));
 }
 
 export function addGuide(guide: Partial<BuyingGuide>): BuyingGuide {
@@ -190,41 +224,55 @@ export function deleteGuide(id: string) {
 
 // --- SITE CONFIG ---
 export function getSiteConfig(): SiteConfig {
+  if (memoryConfig) {
+    return memoryConfig;
+  }
   try {
     if (!fs.existsSync(configPath)) {
-      fs.writeFileSync(configPath, JSON.stringify(INITIAL_SITE_CONFIG, null, 2));
-      return INITIAL_SITE_CONFIG;
+      safeWriteFile(configPath, JSON.stringify(INITIAL_SITE_CONFIG, null, 2));
+      memoryConfig = { ...INITIAL_SITE_CONFIG };
+      return memoryConfig;
     }
     const data = fs.readFileSync(configPath, 'utf8');
-    return JSON.parse(data);
+    memoryConfig = JSON.parse(data);
+    return memoryConfig || INITIAL_SITE_CONFIG;
   } catch {
-    return INITIAL_SITE_CONFIG;
+    memoryConfig = { ...INITIAL_SITE_CONFIG };
+    return memoryConfig;
   }
 }
 
 export function saveSiteConfig(config: Partial<SiteConfig>): SiteConfig {
   const current = getSiteConfig();
   const updated = { ...current, ...config };
-  fs.writeFileSync(configPath, JSON.stringify(updated, null, 2));
+  memoryConfig = updated;
+  safeWriteFile(configPath, JSON.stringify(updated, null, 2));
   return updated;
 }
 
 // --- CAMPAIGNS ---
 export function getFestiveCampaigns(): FestiveCampaign[] {
+  if (memoryCampaigns && memoryCampaigns.length > 0) {
+    return memoryCampaigns;
+  }
   try {
     if (!fs.existsSync(campaignsPath)) {
-      fs.writeFileSync(campaignsPath, JSON.stringify(INITIAL_FESTIVE_CAMPAIGNS, null, 2));
-      return INITIAL_FESTIVE_CAMPAIGNS;
+      safeWriteFile(campaignsPath, JSON.stringify(INITIAL_FESTIVE_CAMPAIGNS, null, 2));
+      memoryCampaigns = [...INITIAL_FESTIVE_CAMPAIGNS];
+      return memoryCampaigns;
     }
     const data = fs.readFileSync(campaignsPath, 'utf8');
-    return JSON.parse(data);
+    memoryCampaigns = JSON.parse(data);
+    return memoryCampaigns || INITIAL_FESTIVE_CAMPAIGNS;
   } catch {
-    return INITIAL_FESTIVE_CAMPAIGNS;
+    memoryCampaigns = [...INITIAL_FESTIVE_CAMPAIGNS];
+    return memoryCampaigns;
   }
 }
 
 export function saveFestiveCampaigns(campaigns: FestiveCampaign[]) {
-  fs.writeFileSync(campaignsPath, JSON.stringify(campaigns, null, 2));
+  memoryCampaigns = campaigns;
+  safeWriteFile(campaignsPath, JSON.stringify(campaigns, null, 2));
 }
 
 export function addCampaign(campaign: Partial<FestiveCampaign>): FestiveCampaign {

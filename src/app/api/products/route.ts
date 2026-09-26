@@ -22,8 +22,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const newProduct = addProduct(body);
-    // Persist to MongoDB Atlas asynchronously
-    syncProductToAtlas(newProduct).catch(() => {});
+    // Persist to MongoDB Atlas
+    await syncProductToAtlas(newProduct);
     return NextResponse.json(newProduct, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

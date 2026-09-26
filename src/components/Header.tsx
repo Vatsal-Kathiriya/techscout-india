@@ -163,7 +163,7 @@ export default function Header() {
       })
       .catch((err) => console.error('Failed to load products for search:', err));
 
-    fetch('/api/admin/config')
+    fetch('/api/config')
       .then((res) => res.json())
       .then((data) => {
         if (data && !data.error) setConfig(data);
@@ -317,13 +317,6 @@ export default function Header() {
             <Link href="/deals" className="text-amber-400 hover:text-amber-300 flex items-center gap-1">
               <Flame className="w-3 h-3" />
               <span>Best Deals</span>
-            </Link>
-            <span className="text-zinc-700">|</span>
-            <Link
-              href="/admin"
-              className="text-zinc-400 hover:text-emerald-400 transition-colors font-mono"
-            >
-              Admin Portal
             </Link>
             <ThemeToggle />
           </div>

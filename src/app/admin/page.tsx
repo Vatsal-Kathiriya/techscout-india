@@ -36,6 +36,11 @@ import {
   FileText,
   DollarSign,
   Check,
+  Lock,
+  LogOut,
+  KeyRound,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 const CATEGORIES: HardwareCategory[] = [
@@ -56,6 +61,16 @@ const THEME_COLORS = [
 ];
 
 export default function AdminControlPanel() {
+  // =========================================================================
+  // 0. OWNER AUTHENTICATION GATE STATE
+  // =========================================================================
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+
   const [activeTab, setActiveTab] = useState<
     'overview' | 'products' | 'deals' | 'guides' | 'config' | 'auditor'
   >('overview');
@@ -248,12 +263,68 @@ export default function AdminControlPanel() {
     }
   };
 
+  const checkAuthStatus = async () => {
+    try {
+      const res = await fetch('/api/admin/auth');
+      const data = await res.json();
+      if (data.authenticated) {
+        setIsAuthenticated(true);
+        fetchProducts();
+        fetchCampaigns();
+        fetchGuides();
+        fetchConfig();
+        fetchAtlasStatus();
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch {
+      setIsAuthenticated(false);
+    } finally {
+      setAuthChecked(true);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthLoading(true);
+    setAuthError('');
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsAuthenticated(true);
+        setPasswordInput('');
+        fetchProducts();
+        fetchCampaigns();
+        fetchGuides();
+        fetchConfig();
+        fetchAtlasStatus();
+      } else {
+        setAuthError(data.error || 'Invalid owner authentication key.');
+      }
+    } catch (err: any) {
+      setAuthError('Authentication failed: ' + err.message);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/admin/auth', { method: 'DELETE' });
+    } catch {}
+    setIsAuthenticated(false);
+    setProducts([]);
+    setCampaigns([]);
+    setGuides([]);
+  };
+
   useEffect(() => {
-    fetchProducts();
-    fetchCampaigns();
-    fetchGuides();
-    fetchConfig();
-    fetchAtlasStatus();
+    checkAuthStatus();
   }, []);
 
   // Filtered Products
@@ -664,6 +735,110 @@ export default function AdminControlPanel() {
     return { total, festiveDeals, activeCamps, totalGuides, stalePrices, complianceIssues: issues };
   }, [products, campaigns, guides]);
 
+  // 1. Loading state while checking owner credentials
+  if (!authChecked) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center font-sans">
+        <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-4">
+          <RefreshCw className="w-6 h-6 text-emerald-600 animate-spin" />
+        </div>
+        <div className="text-sm font-bold text-zinc-900 dark:text-zinc-100 font-mono">
+          Verifying security clearance...
+        </div>
+        <p className="text-xs text-zinc-500 mt-1">GenzTech.in Protected System</p>
+      </div>
+    );
+  }
+
+  // 2. Lockscreen challenge if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 font-sans">
+        <div className="w-full max-w-md bg-white dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="text-center space-y-2">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
+              <Lock className="w-7 h-7" />
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Owner Access Required</span>
+            </div>
+            <h1 className="text-2xl font-black text-zinc-950 dark:text-white tracking-tight">
+              GenzTech.in Admin Console
+            </h1>
+            <p className="text-xs text-zinc-500 leading-relaxed max-w-xs mx-auto">
+              This control center is strictly restricted to the platform owner. Enter your owner passkey to access inventory, festive campaigns, and CMS configuration.
+            </p>
+          </div>
+
+          {authError && (
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800 rounded-xl text-xs font-mono text-rose-800 dark:text-rose-300 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600" />
+              <span>{authError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
+                Owner Passkey / Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400">
+                  <KeyRound className="w-4 h-4" />
+                </div>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  autoFocus
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="Enter secret owner passkey"
+                  className="w-full pl-10 pr-10 py-3 bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-950 dark:text-white font-mono placeholder:text-zinc-400 focus:outline-none focus:border-emerald-600 transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={authLoading || !passwordInput.trim()}
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+            >
+              {authLoading ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Verifying Key...</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-4 h-4" />
+                  <span>Unlock Control Center</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="text-center pt-2">
+            <Link
+              href="/"
+              className="text-xs font-mono text-zinc-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              &larr; Return to Storefront
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 font-sans">
       
@@ -717,6 +892,15 @@ export default function AdminControlPanel() {
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export site-data.json</span>
+          </button>
+
+          <button
+            onClick={handleSignOut}
+            className="px-3.5 py-1.5 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900 border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-xl text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+            title="Lock administrative console and end session"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
           </button>
         </div>
       </div>

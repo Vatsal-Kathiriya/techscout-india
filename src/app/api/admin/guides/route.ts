@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getGuidesFromDb } from '@/lib/dbService';
 import { addGuide, updateGuide, deleteGuide } from '@/lib/jsonDb';
 import { syncGuideToAtlas, deleteGuideFromAtlas } from '@/lib/atlasSync';
+import { isRequestAuthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const body = await req.json();
     const created = addGuide(body);
@@ -26,6 +30,9 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const body = await req.json();
     if (!body._id && !body.slug) {
@@ -44,6 +51,9 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');

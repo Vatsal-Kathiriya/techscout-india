@@ -11,7 +11,7 @@ export default function Footer() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
 
   useEffect(() => {
-    fetch('/api/admin/config')
+    fetch('/api/config')
       .then((res) => res.json())
       .then((data) => {
         if (data && !data.error) setConfig(data);
@@ -211,11 +211,6 @@ export default function Footer() {
               <li>
                 <Link href="/privacy-policy" className="hover:text-emerald-400 transition-colors">
                   Privacy Policy & Cookies
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin" className="hover:text-zinc-300 font-mono text-[11px] transition-colors">
-                  Admin Management Portal
                 </Link>
               </li>
             </ul>

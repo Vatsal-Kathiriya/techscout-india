@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getProductByIdFromDb } from '@/lib/dbService';
 import { updateProduct, deleteProduct } from '@/lib/jsonDb';
 import { syncProductToAtlas, deleteProductFromAtlas } from '@/lib/atlasSync';
+import { isRequestAuthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,8 +20,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
-// UPDATE a product
+// UPDATE a product (Owner Only)
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const body = await req.json();
     const { id } = await params;
@@ -40,8 +44,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
-// DELETE a product
+// DELETE a product (Owner Only)
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const { id } = await params;
 

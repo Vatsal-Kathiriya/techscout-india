@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { STORE_ID } from '@/lib/affiliate';
+import { isRequestAuthorized } from '@/lib/auth';
 
 export async function POST(req: Request) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const body = await req.json();
     const rawInput = (body.input || body.url || body.asin || '').trim();

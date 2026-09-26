@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getProductsFromDb } from '@/lib/dbService';
 import { addProduct } from '@/lib/jsonDb';
 import { syncProductToAtlas } from '@/lib/atlasSync';
+import { isRequestAuthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     const body = await req.json();
     const newProduct = addProduct(body);

@@ -15,7 +15,12 @@ import {
   syncConfigToAtlas,
 } from '@/lib/atlasSync';
 
+import { isRequestAuthorized } from '@/lib/auth';
+
 export async function POST(req: Request) {
+  if (!isRequestAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized: Owner access required.' }, { status: 401 });
+  }
   try {
     let body: any = {};
     try {

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Product } from '@/types/store';
 import { useComparison } from '@/context/ComparisonContext';
+import { calculateDiscount } from '@/lib/priceUtils';
 import ProductCard from './ProductCard';
 import {
   ExternalLink,
@@ -34,6 +35,10 @@ export default function ProductDetailView({
   // Gallery state
   const images = product.gallery && product.gallery.length > 0 ? product.gallery : [product.imageUrl];
   const [selectedImage, setSelectedImage] = useState(images[0] || product.imageUrl);
+
+  const discountPercent = React.useMemo(() => {
+    return calculateDiscount(product.price, product.mrp);
+  }, [product.price, product.mrp]);
 
   const isStale = React.useMemo(() => {
     if (!product.priceLastVerified) return false;
@@ -135,19 +140,30 @@ export default function ProductDetailView({
           {/* Price & Amazon Availability Box */}
           <div className="bg-white dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm space-y-4">
             
-            <div className="flex items-baseline justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div>
                 <div className="flex items-baseline gap-3">
+                  {discountPercent > 0 && (
+                    <span className="text-2xl sm:text-3xl font-medium font-sans text-rose-600 dark:text-rose-500">
+                      -{discountPercent}%
+                    </span>
+                  )}
                   <span className="text-3xl sm:text-4xl font-black font-mono text-zinc-950 dark:text-white">
                     {product.price}
                   </span>
-                  {product.mrp && product.mrp !== product.price && (
-                    <span className="text-sm font-mono text-zinc-400 line-through">
-                      M.R.P: {product.mrp}
-                    </span>
-                  )}
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-mono mt-1">
+
+                {discountPercent > 0 && product.mrp && (
+                  <div className="text-xs sm:text-sm font-mono text-zinc-500 dark:text-zinc-400 mt-1">
+                    M.R.P.: <span className="line-through">{product.mrp}</span>
+                  </div>
+                )}
+
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400 font-sans mt-0.5">
+                  Inclusive of all taxes
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-mono mt-2">
                   <Clock className="w-3.5 h-3.5" />
                   <span>
                     Indicative Price (Verified{' '}
@@ -156,7 +172,7 @@ export default function ProductDetailView({
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                   Verified In Stock

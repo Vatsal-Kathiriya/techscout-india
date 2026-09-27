@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Product } from '@/types/store';
 import { useComparison } from '@/context/ComparisonContext';
+import { calculateDiscount } from '@/lib/priceUtils';
 import {
   ExternalLink,
   Check,
@@ -25,6 +26,10 @@ export default function ProductCard({ product, displayMode }: ProductCardProps) 
 
   // Active mode: either passed explicitly or read from product or default to indicative
   const mode = displayMode || product.priceMode || 'indicative';
+
+  const discountPercent = React.useMemo(() => {
+    return calculateDiscount(product.price, product.mrp);
+  }, [product.price, product.mrp]);
 
   // Check staleness (if verified date is > 24 hours ago)
   const isStale = React.useMemo(() => {
@@ -154,17 +159,23 @@ export default function ProductCard({ product, displayMode }: ProductCardProps) 
           {mode === 'indicative' ? (
             <div className="mb-3">
               <div className="flex items-baseline gap-2">
+                {discountPercent > 0 && (
+                  <span className="text-sm font-bold font-sans text-rose-600 dark:text-rose-500">
+                    -{discountPercent}%
+                  </span>
+                )}
                 <span className="text-lg font-black font-mono text-zinc-950 dark:text-white">
                   {product.price}
                 </span>
-                {product.mrp && product.mrp !== product.price && (
-                  <span className="text-xs font-mono text-zinc-400 line-through">
-                    {product.mrp}
-                  </span>
-                )}
               </div>
 
-              <div className="flex items-center gap-1 text-[10px] text-zinc-400 font-mono mt-0.5">
+              {discountPercent > 0 && product.mrp && (
+                <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  M.R.P.: <span className="line-through">{product.mrp}</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-1 text-[10px] text-zinc-400 font-mono mt-1">
                 <Clock className="w-3 h-3 text-zinc-400 shrink-0" />
                 <span>Indicative Price (Verified {new Date(product.priceLastVerified || Date.now()).toLocaleDateString('en-IN')})</span>
               </div>

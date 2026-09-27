@@ -9,6 +9,7 @@ import {
   SiteConfig,
   HardwareCategory,
 } from '@/types/store';
+import { calculateDiscount } from '@/lib/priceUtils';
 import {
   LayoutDashboard,
   Package,
@@ -1226,8 +1227,18 @@ export default function AdminControlPanel() {
                         {p.category}
                       </td>
                       <td className="p-3 font-mono">
-                        <span className="font-bold text-zinc-900 dark:text-white block">{p.price}</span>
-                        <span className="text-[10px] text-zinc-400">Mode: {p.priceMode || 'indicative'}</span>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="font-bold text-zinc-900 dark:text-white">{p.price}</span>
+                          {calculateDiscount(p.price, p.mrp) > 0 && p.mrp && (
+                            <span className="text-[10px] text-zinc-400 line-through">{p.mrp}</span>
+                          )}
+                        </div>
+                        {calculateDiscount(p.price, p.mrp) > 0 && (
+                          <span className="text-[10px] font-bold text-rose-600 block">
+                            -{calculateDiscount(p.price, p.mrp)}% OFF
+                          </span>
+                        )}
+                        <span className="text-[10px] text-zinc-400 block">Mode: {p.priceMode || 'indicative'}</span>
                       </td>
                       <td className="p-3 font-mono font-bold text-emerald-600">
                         {p.specScore?.toFixed(1) || '9.0'}
@@ -1913,7 +1924,14 @@ export default function AdminControlPanel() {
                   />
                 </div>
                 <div>
-                  <label className="block text-zinc-500 uppercase tracking-wider mb-1">Original M.R.P.</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-zinc-500 uppercase tracking-wider">Original M.R.P.</label>
+                    {calculateDiscount(editForm.price, editForm.mrp) > 0 && (
+                      <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950/60 px-1.5 py-0.2 rounded border border-rose-200 dark:border-rose-800">
+                        -{calculateDiscount(editForm.price, editForm.mrp)}%
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="text"
                     value={editForm.mrp || ''}
@@ -2188,7 +2206,14 @@ export default function AdminControlPanel() {
                   />
                 </div>
                 <div>
-                  <label className="block text-zinc-500 uppercase tracking-wider mb-1">M.R.P. (e.g. ₹34,990)</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-zinc-500 uppercase tracking-wider">M.R.P. (e.g. ₹34,990)</label>
+                    {calculateDiscount(manualProductForm.price, manualProductForm.mrp) > 0 && (
+                      <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950/60 px-1.5 py-0.2 rounded border border-rose-200 dark:border-rose-800">
+                        -{calculateDiscount(manualProductForm.price, manualProductForm.mrp)}%
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="text"
                     placeholder="₹34,990"

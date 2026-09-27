@@ -98,6 +98,27 @@ export async function POST(req: Request) {
     }
     price = price.replace(/\.$/, '');
 
+    // Extract MRP (Original Basis / Strike-through Price)
+    let mrp = '';
+    const mrpSelectors = [
+      'span.basisPrice span.a-offscreen',
+      '.a-price.a-text-price span.a-offscreen',
+      'span[data-a-strike="true"] span.a-offscreen',
+      '.a-text-strike',
+      '#listPrice',
+      '#priceblock_ourprice',
+    ];
+    for (const sel of mrpSelectors) {
+      let val = $(sel).first().text().trim();
+      if (val) {
+        val = val.replace(/[^\d.,]/g, '').replace(/\.00$/, '').trim();
+        if (val) {
+          mrp = val.startsWith('₹') ? val : `₹${val}`;
+          break;
+        }
+      }
+    }
+
     // Extract Image
     let imageUrl = $('#landingImage').attr('src');
     if (!imageUrl) {
@@ -152,11 +173,19 @@ export async function POST(req: Request) {
       ? rawInput
       : `https://www.amazon.in/dp/${extractedAsin || rawInput}?tag=${STORE_ID}`;
 
+    const cleanPrice = price ? `₹${price}` : 'Price not available';
+    const numPrice = parseFloat((price || '').replace(/[^0-9.]/g, '')) || 0;
+    const numMrp = parseFloat((mrp || '').replace(/[^0-9.]/g, '')) || 0;
+    // Only treat MRP as distinct if Amazon genuinely displays a higher basis MRP (discount exists).
+    // If Amazon shows raw price / no discount, or if numMrp <= numPrice, MRP equals price.
+    const finalMrp = numMrp > numPrice ? mrp : cleanPrice;
+
     return NextResponse.json({
       asin: extractedAsin || rawInput,
       title,
       brand,
-      price: price ? `₹${price}` : 'Price not available',
+      price: cleanPrice,
+      mrp: finalMrp,
       imageUrl: imageUrl || '',
       url: `https://www.amazon.in/dp/${extractedAsin || rawInput}`,
       affiliateUrl: finalAffiliateUrl,

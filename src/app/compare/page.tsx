@@ -20,6 +20,7 @@ import {
   IndianRupee,
 } from 'lucide-react';
 import { Product } from '@/types/store';
+import { calculateDiscount } from '@/lib/priceUtils';
 
 export default function ComparePage() {
   const { selectedProducts, removeFromCompare, clearCompare, addToCompare } = useComparison();
@@ -256,9 +257,21 @@ export default function ComparePage() {
                           >
                             {prod.title}
                           </Link>
-                          <div className="text-base font-black font-mono text-zinc-900 dark:text-white mt-1">
-                            {prod.price}
+                          <div className="flex items-baseline gap-1.5 mt-1">
+                            {calculateDiscount(prod.price, prod.mrp) > 0 && (
+                              <span className="text-xs font-bold text-rose-600 dark:text-rose-500">
+                                -{calculateDiscount(prod.price, prod.mrp)}%
+                              </span>
+                            )}
+                            <span className="text-base font-black font-mono text-zinc-900 dark:text-white">
+                              {prod.price}
+                            </span>
                           </div>
+                          {calculateDiscount(prod.price, prod.mrp) > 0 && prod.mrp && (
+                            <div className="text-[10px] font-mono text-zinc-400 line-through">
+                              M.R.P.: {prod.mrp}
+                            </div>
+                          )}
                         </div>
 
                         {/* CTA button */}

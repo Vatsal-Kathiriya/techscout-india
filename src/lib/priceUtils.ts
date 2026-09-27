@@ -44,3 +44,4 @@ export function formatCurrency(val?: string | number): string {
   if (str.startsWith('₹')) return str;
   return `₹${str}`;
 }
+

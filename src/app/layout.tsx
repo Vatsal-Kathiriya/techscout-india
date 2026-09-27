@@ -44,6 +44,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   openGraph: {
     title: 'GenzTech.in | Smart Tech. Better Choices.',
     description:
@@ -52,12 +62,21 @@ export const metadata: Metadata = {
     siteName: 'GenzTech.in',
     locale: 'en_IN',
     type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/logo-stacked.png`,
+        width: 785,
+        height: 483,
+        alt: 'GenzTech.in | Smart Tech. Better Choices.',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'GenzTech.in | Smart Tech. Better Choices.',
     description:
       'Discover useful technology, compare products and find smarter buying options on Amazon India.',
+    images: [`${siteUrl}/logo-stacked.png`],
     site: '@genztech_in',
   },
   robots: {
@@ -87,7 +106,7 @@ const jsonLd = {
       '@id': `${siteUrl}/#organization`,
       name: 'GenzTech.in',
       url: siteUrl,
-      logo: `${siteUrl}/favicon.svg`,
+      logo: `${siteUrl}/icon.png`,
       description:
         'Smart Tech. Better Choices. Independent hardware benchmarks, comparison matrix, and Amazon India affiliate price tracking.',
       sameAs: [],
@@ -130,6 +149,10 @@ export default function RootLayout({
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-4413078926879014'}`}
           crossOrigin="anonymous"
         />
+        {/* Brand Favicon & Icons */}
+        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
       <body
         className="font-sans bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 flex flex-col min-h-screen transition-colors duration-300 antialiased"

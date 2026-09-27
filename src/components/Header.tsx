@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useComparison } from '@/context/ComparisonContext';
 import ThemeToggle from './ThemeToggle';
@@ -329,25 +330,36 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4 md:gap-8">
         
         {/* Brand Logo & Tagline */}
-        <Link href="/" className="flex flex-col shrink-0 group">
-          <div className="flex items-center gap-1.5">
-            <span className="text-2xl font-black tracking-tight text-zinc-950 dark:text-white">
-              {config?.brandName ? (
-                config.brandName
-              ) : (
-                <>
-                  Genz<span className="text-emerald-600">Tech</span>
-                  <span className="text-xs text-emerald-600 font-mono">.in</span>
-                </>
-              )}
-            </span>
-            <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded border border-zinc-200 dark:border-zinc-700">
-              Tech Scout
-            </span>
-          </div>
-          <span className="text-[10px] text-zinc-500 font-medium tracking-wide">
-            {config?.tagline || 'Smart Tech. Better Choices.'}
-          </span>
+        <Link href="/" className="flex items-center shrink-0 group py-0.5" aria-label="GenzTech.in Home">
+          {config?.brandName && config.brandName !== 'GenzTech' && config.brandName !== 'GenzTech.in' ? (
+            <div className="flex flex-col">
+              <span className="text-2xl font-black tracking-tight text-zinc-950 dark:text-white">
+                {config.brandName}
+              </span>
+              <span className="text-[10px] text-zinc-500 font-medium tracking-wide">
+                {config?.tagline || 'Smart Tech. Better Choices.'}
+              </span>
+            </div>
+          ) : (
+            <>
+              <Image
+                src="/logo-horizontal.png"
+                alt="GenzTech.in - Smart Tech. Better Choices."
+                width={280}
+                height={49}
+                priority
+                className="h-8 sm:h-9 md:h-11 w-auto object-contain dark:hidden"
+              />
+              <Image
+                src="/logo-horizontal-dark.png"
+                alt="GenzTech.in - Smart Tech. Better Choices."
+                width={280}
+                height={49}
+                priority
+                className="h-8 sm:h-9 md:h-11 w-auto object-contain hidden dark:block"
+              />
+            </>
+          )}
         </Link>
 
         {/* Unified Scoped Search Bar */}

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowUp, Mail, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { SiteConfig } from '@/types/store';
 
@@ -54,21 +55,26 @@ export default function Footer() {
           
           {/* Col 1: Brand & Mission */}
           <div className="space-y-4">
-            <Link href="/" className="inline-block">
-              <span className="text-2xl font-black tracking-tight text-white">
-                {config?.brandName ? (
-                  config.brandName
-                ) : (
-                  <>
-                    Genz<span className="text-emerald-500">Tech</span>
-                    <span className="text-xs text-emerald-500 font-mono">.in</span>
-                  </>
-                )}
-              </span>
+            <Link href="/" className="inline-block" aria-label="GenzTech.in Home">
+              {config?.brandName && config.brandName !== 'GenzTech' && config.brandName !== 'GenzTech.in' ? (
+                <div>
+                  <span className="text-2xl font-black tracking-tight text-white">
+                    {config.brandName}
+                  </span>
+                  <p className="text-xs text-zinc-400 font-semibold uppercase tracking-wider text-emerald-400 mt-1">
+                    {config?.tagline || 'Smart Tech. Better Choices.'}
+                  </p>
+                </div>
+              ) : (
+                <Image
+                  src="/logo-horizontal-dark.png"
+                  alt="GenzTech.in - Smart Tech. Better Choices."
+                  width={240}
+                  height={42}
+                  className="h-9 w-auto object-contain"
+                />
+              )}
             </Link>
-            <p className="text-xs text-zinc-400 font-semibold uppercase tracking-wider text-emerald-400">
-              {config?.tagline || 'Smart Tech. Better Choices.'}
-            </p>
             <p className="text-xs text-zinc-400 leading-relaxed">
               {config?.footerAbout ||
                 "India's independent consumer hardware intelligence platform. We test, benchmark, and compare flagship smartphones, laptops, ANC headphones, and smart gear to help you make smarter purchasing decisions on Amazon.in."}

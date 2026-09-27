@@ -85,6 +85,16 @@ export function saveProducts(products: Product[]) {
   safeWriteFile(productsPath, JSON.stringify(products, null, 2));
 }
 
+export function deriveBrandFromTitle(title?: string, currentBrand?: string): string {
+  if (currentBrand && currentBrand.trim() && currentBrand.trim().toLowerCase() !== 'genztech') {
+    return currentBrand.trim();
+  }
+  if (!title) return 'Generic';
+  const firstToken = title.trim().split(/\s+/)[0] || '';
+  const cleaned = firstToken.replace(/[®™:,.-]+$/g, '').trim();
+  return cleaned || 'Generic';
+}
+
 export function addProduct(product: Partial<Product>): Product {
   const products = getProducts();
   const titleSlug = (product.title || 'tech-item')
@@ -97,7 +107,7 @@ export function addProduct(product: Partial<Product>): Product {
     slug: product.slug || `${titleSlug}-${Date.now().toString().slice(-4)}`,
     asin: product.asin || `ASIN-${Date.now().toString().slice(-6)}`,
     title: product.title || 'Untitled Hardware',
-    brand: product.brand || 'GenzTech',
+    brand: deriveBrandFromTitle(product.title, product.brand),
     category: (product.category as any) || 'accessories',
     price: product.price || '₹0',
     mrp: product.mrp || product.price || '₹0',
@@ -130,9 +140,14 @@ export function updateProduct(id: string, updates: Partial<Product>): Product | 
   const products = getProducts();
   const index = products.findIndex((p) => p._id === id || p.asin === id || p.slug === id);
   if (index > -1) {
+    const updatedBrand = deriveBrandFromTitle(
+      updates.title || products[index].title,
+      updates.brand !== undefined ? updates.brand : products[index].brand
+    );
     products[index] = {
       ...products[index],
       ...updates,
+      brand: updatedBrand,
       priceLastVerified: updates.price ? new Date().toISOString() : products[index].priceLastVerified,
     };
     saveProducts(products);

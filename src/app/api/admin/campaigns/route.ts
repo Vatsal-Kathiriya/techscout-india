@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getCampaignsFromDb } from '@/lib/dbService';
-import { addCampaign, updateCampaign, deleteCampaign } from '@/lib/jsonDb';
-import { syncCampaignToAtlas, deleteCampaignFromAtlas } from '@/lib/atlasSync';
+import { getCampaignsFromDb, updateCampaignInDb, deleteCampaignFromDb } from '@/lib/dbService';
+import { addCampaign } from '@/lib/jsonDb';
+import { syncCampaignToAtlas } from '@/lib/atlasSync';
 import { isRequestAuthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -38,11 +38,10 @@ export async function PUT(req: Request) {
     if (!body.id) {
       return NextResponse.json({ error: 'Campaign id is required' }, { status: 400 });
     }
-    const updated = updateCampaign(body.id, body);
+    const updated = await updateCampaignInDb(body.id, body);
     if (!updated) {
       return NextResponse.json({ error: 'Campaign not found' }, { status: 404 });
     }
-    await syncCampaignToAtlas(updated);
     return NextResponse.json(updated);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -59,8 +58,7 @@ export async function DELETE(req: Request) {
     if (!id) {
       return NextResponse.json({ error: 'Campaign id is required' }, { status: 400 });
     }
-    deleteCampaign(id);
-    await deleteCampaignFromAtlas(id);
+    await deleteCampaignFromDb(id);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

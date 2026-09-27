@@ -133,6 +133,18 @@ export async function POST(req: Request) {
       );
     }
 
+    // Extract Brand: first check byline or brand attribute, otherwise derive from first word of title
+    let brand = '';
+    const byline = $('#bylineInfo').text().trim();
+    const bylineMatch = byline.match(/(?:Visit the |Brand:\s*)([\w\d\s]+?)(?: Store|$)/i);
+    if (bylineMatch && bylineMatch[1]) {
+      brand = bylineMatch[1].trim();
+    }
+    if (!brand || brand.toLowerCase() === 'genztech') {
+      const firstWord = (title.trim().split(/\s+/)[0] || '').replace(/[®™:,.-]+$/g, '').trim();
+      brand = firstWord || 'Generic';
+    }
+
     // Determine final affiliate URL:
     // If user provided a short link or full affiliate URL, keep it!
     // Otherwise construct universal affiliate URL.
@@ -143,6 +155,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       asin: extractedAsin || rawInput,
       title,
+      brand,
       price: price ? `₹${price}` : 'Price not available',
       imageUrl: imageUrl || '',
       url: `https://www.amazon.in/dp/${extractedAsin || rawInput}`,

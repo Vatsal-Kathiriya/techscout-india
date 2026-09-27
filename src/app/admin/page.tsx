@@ -404,8 +404,14 @@ export default function AdminControlPanel() {
         .map((s) => s.trim())
         .filter(Boolean);
 
+      const firstWord = (manualProductForm.title || '').trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '').trim() || '';
+      const derivedBrand = manualProductForm.brand && manualProductForm.brand.trim() && manualProductForm.brand.toLowerCase() !== 'genztech'
+        ? manualProductForm.brand.trim()
+        : (firstWord || 'Generic');
+
       const payload = {
         ...manualProductForm,
+        brand: derivedBrand,
         pros: pros.length > 0 ? pros : ['Reliable performance', 'Great build quality'],
         cons: cons.length > 0 ? cons : ['Premium pricing'],
       };
@@ -456,16 +462,22 @@ export default function AdminControlPanel() {
       if (res.ok) {
         setProducts((prev) => prev.filter((p) => p._id !== id && p.asin !== id && p.slug !== id));
       } else {
-        alert('Failed to delete product');
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to delete product');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert(`Delete error: ${err.message}`);
     }
   };
 
   const handleOpenEditProduct = (p: Product) => {
     setEditingProduct(p);
-    setEditForm({ ...p, specs: { ...(p.specs || {}) } });
+    const firstWord = (p.title || '').trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '').trim() || '';
+    const initialBrand = p.brand && p.brand.trim() && p.brand.toLowerCase() !== 'genztech'
+      ? p.brand.trim()
+      : (firstWord || 'Generic');
+    setEditForm({ ...p, brand: initialBrand, specs: { ...(p.specs || {}) } });
     setEditProsInput(p.pros?.join('\n') || '');
     setEditConsInput(p.cons?.join('\n') || '');
   };
@@ -484,8 +496,14 @@ export default function AdminControlPanel() {
         .map((s) => s.trim())
         .filter(Boolean);
 
+      const firstWord = (editForm.title || '').trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '').trim() || '';
+      const derivedBrand = editForm.brand && editForm.brand.trim() && editForm.brand.toLowerCase() !== 'genztech'
+        ? editForm.brand.trim()
+        : (firstWord || 'Generic');
+
       const payload = {
         ...editForm,
+        brand: derivedBrand,
         pros,
         cons,
       };
@@ -504,8 +522,9 @@ export default function AdminControlPanel() {
       } else {
         alert(updated.error || 'Failed to update product');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert(`Save error: ${err.message}`);
     } finally {
       setSaveLoading(false);
     }
@@ -1830,7 +1849,17 @@ export default function AdminControlPanel() {
                   type="text"
                   required
                   value={editForm.title || ''}
-                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    const firstWord = newTitle.trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '') || '';
+                    const prevFirstWord = (editForm.title || '').trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '') || '';
+                    const shouldAutoFill = !editForm.brand || editForm.brand === 'GenzTech' || editForm.brand === prevFirstWord;
+                    setEditForm({
+                      ...editForm,
+                      title: newTitle,
+                      brand: shouldAutoFill ? firstWord : editForm.brand,
+                    });
+                  }}
                   className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-900 dark:text-white font-sans text-xs"
                 />
               </div>
@@ -2091,7 +2120,17 @@ export default function AdminControlPanel() {
                   required
                   placeholder="e.g. Sony WH-1000XM5 Wireless ANC Headphones"
                   value={manualProductForm.title || ''}
-                  onChange={(e) => setManualProductForm({ ...manualProductForm, title: e.target.value })}
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    const firstWord = newTitle.trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '') || '';
+                    const prevFirstWord = (manualProductForm.title || '').trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '') || '';
+                    const shouldAutoFill = !manualProductForm.brand || manualProductForm.brand === 'GenzTech' || manualProductForm.brand === prevFirstWord;
+                    setManualProductForm({
+                      ...manualProductForm,
+                      title: newTitle,
+                      brand: shouldAutoFill ? firstWord : manualProductForm.brand,
+                    });
+                  }}
                   className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-900 dark:text-white font-sans text-xs"
                 />
               </div>

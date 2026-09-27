@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getGuidesFromDb } from '@/lib/dbService';
-import { addGuide, updateGuide, deleteGuide } from '@/lib/jsonDb';
-import { syncGuideToAtlas, deleteGuideFromAtlas } from '@/lib/atlasSync';
+import { getGuidesFromDb, updateGuideInDb, deleteGuideFromDb } from '@/lib/dbService';
+import { addGuide } from '@/lib/jsonDb';
+import { syncGuideToAtlas } from '@/lib/atlasSync';
 import { isRequestAuthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -39,11 +39,10 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: 'Guide _id or slug is required' }, { status: 400 });
     }
     const id = body._id || body.slug;
-    const updated = updateGuide(id, body);
+    const updated = await updateGuideInDb(id, body);
     if (!updated) {
       return NextResponse.json({ error: 'Guide not found' }, { status: 404 });
     }
-    await syncGuideToAtlas(updated);
     return NextResponse.json(updated);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -60,8 +59,7 @@ export async function DELETE(req: Request) {
     if (!id) {
       return NextResponse.json({ error: 'Guide id is required' }, { status: 400 });
     }
-    deleteGuide(id);
-    await deleteGuideFromAtlas(id);
+    await deleteGuideFromDb(id);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

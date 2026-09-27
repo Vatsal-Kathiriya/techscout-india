@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema(
     slug: { type: String, required: true, unique: true },
     asin: { type: String, required: true, unique: true, trim: true },
     title: { type: String, required: true },
-    brand: { type: String, default: 'GenzTech' },
+    brand: { type: String, default: 'Generic' },
     category: { type: String, default: 'accessories' },
     price: { type: String, required: true },
     mrp: { type: String, required: true },
@@ -34,5 +34,12 @@ const ProductSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+ProductSchema.pre('save', function (this: any) {
+  if (!this.brand || this.brand === 'GenzTech') {
+    const firstWord = (this.title || '').trim().split(/\s+/)[0]?.replace(/[®™:,.-]+$/g, '').trim();
+    this.brand = firstWord || 'Generic';
+  }
+});
 
 export default mongoose.models.Product || mongoose.model('Product', ProductSchema);

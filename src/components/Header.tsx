@@ -591,7 +591,7 @@ export default function Header() {
         className="hidden md:block bg-zinc-50 dark:bg-zinc-900/90 border-y border-zinc-200 dark:border-zinc-800 relative"
         onMouseLeave={() => setActiveMegaCategory(null)}
       >
-        <div className="max-w-7xl mx-auto px-4 flex items-center overflow-x-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center gap-1">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;
             const isMegaOpen = activeMegaCategory === cat.id;

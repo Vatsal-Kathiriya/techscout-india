@@ -51,7 +51,7 @@ export interface Product {
   gallery?: string[];
   affiliateUrl: string;
   url?: string;
-  specScore: number;
+  specScore?: number | null;
   specs: ProductSpecs;
   verdict: string;
   editorialReview: string;

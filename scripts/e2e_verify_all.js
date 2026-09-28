@@ -128,7 +128,9 @@ runTest('Comparison matrix handles 2, 3, or 4 products with spec key alignment',
   // Verify spec attributes
   sampleComparison.forEach((p) => {
     assert(p.specs, `Product "${p.title}" must have specs object`);
-    assert(p.specScore >= 1 && p.specScore <= 10, 'Spec score must be between 1 and 10');
+    if (p.specScore != null) {
+      assert(p.specScore >= 1 && p.specScore <= 10, 'Spec score must be between 1 and 10');
+    }
     assert(Array.isArray(p.pros) && p.pros.length > 0, 'Pros must be a non-empty array');
     assert(Array.isArray(p.cons) && p.cons.length > 0, 'Cons must be a non-empty array');
     assert(p.verdict && p.verdict.length > 10, 'Verdict must be detailed');

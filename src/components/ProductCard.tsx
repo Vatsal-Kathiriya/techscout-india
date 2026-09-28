@@ -82,14 +82,16 @@ export default function ProductCard({ product, displayMode }: ProductCardProps) 
         </div>
 
         {/* Spec Score Badge */}
-        <div
-          className="flex items-center gap-1 px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 rounded text-xs font-mono font-bold"
-          title="GenzTech Hardware Spec Score (out of 10)"
-        >
-          <Award className="w-3 h-3 text-emerald-600" />
-          <span>{product.specScore ? product.specScore.toFixed(1) : '9.0'}</span>
-          <span className="text-[10px] text-zinc-400 font-normal">/10</span>
-        </div>
+        {product.specScore != null && (
+          <div
+            className="flex items-center gap-1 px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 rounded text-xs font-mono font-bold"
+            title="GenzTech Hardware Spec Score (out of 10)"
+          >
+            <Award className="w-3 h-3 text-emerald-600" />
+            <span>{product.specScore.toFixed(1)}</span>
+            <span className="text-[10px] text-zinc-400 font-normal">/10</span>
+          </div>
+        )}
       </div>
 
       {/* Product Visual Container (Soft Metallic Gray, mix-blend-multiply) */}

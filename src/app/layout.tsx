@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ComparisonProvider } from '@/context/ComparisonContext';
@@ -7,6 +7,12 @@ import Footer from '@/components/Footer';
 import ComparisonDrawer from '@/components/ComparisonDrawer';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://genz-tech.in';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: {

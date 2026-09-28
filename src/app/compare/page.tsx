@@ -64,7 +64,7 @@ export default function ComparePage() {
   const getSpecValue = (prod: Product, key: string): string => {
     if (key === 'category') return prod.category.toUpperCase();
     if (key === 'price') return prod.price;
-    if (key === 'specScore') return `${prod.specScore?.toFixed(1) || '9.0'} / 10`;
+    if (key === 'specScore') return prod.specScore != null ? `${prod.specScore.toFixed(1)} / 10` : 'N/A';
     if (prod.specs && (prod.specs as any)[key]) return (prod.specs as any)[key];
     return '—';
   };
@@ -210,7 +210,7 @@ export default function ComparePage() {
 
             <div className="flex items-center gap-2 flex-wrap text-xs font-mono">
               <span className="px-3 py-1 bg-white text-emerald-950 font-bold rounded-lg shadow-sm">
-                Winner: {selectedProducts.reduce((prev, curr) => (curr.specScore > prev.specScore ? curr : prev)).title.slice(0, 32)}...
+                Winner: {selectedProducts.reduce((prev, curr) => ((curr.specScore || 0) > (prev.specScore || 0) ? curr : prev)).title.slice(0, 32)}...
               </span>
             </div>
           </div>

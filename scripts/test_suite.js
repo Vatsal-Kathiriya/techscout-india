@@ -44,7 +44,9 @@ test('Every product has required hardware specs, real image URL, and no emojis',
     assert(p.asin && p.asin.trim().length > 0, `Product "${p.title}" missing ASIN`);
     assert(p.imageUrl && p.imageUrl.startsWith('http'), `Product "${p.title}" missing valid HTTP image`);
     assert(!emojiRegex.test(p.title), `Product "${p.title}" contains prohibited emoji`);
-    assert(p.specScore >= 1 && p.specScore <= 10, `Product "${p.title}" invalid spec score`);
+    if (p.specScore != null) {
+      assert(p.specScore >= 1 && p.specScore <= 10, `Product "${p.title}" invalid spec score`);
+    }
   });
 });
 

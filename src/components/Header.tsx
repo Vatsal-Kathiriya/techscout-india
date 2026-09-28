@@ -619,7 +619,7 @@ export default function Header() {
 
                 {/* Amazon-style Mega Menu Dropdown */}
                 {isMegaOpen && cat.brands && (
-                  <div className="absolute top-full left-0 w-80 sm:w-96 bg-white dark:bg-zinc-950 border-2 border-zinc-200 dark:border-zinc-800 rounded-b-xl shadow-2xl p-5 z-50 grid grid-cols-2 gap-4">
+                  <div className={`absolute top-full ${CATEGORIES.indexOf(cat) > 4 ? 'right-0' : 'left-0'} w-80 sm:w-96 bg-white dark:bg-zinc-950 border-2 border-zinc-200 dark:border-zinc-800 rounded-b-xl shadow-2xl p-5 z-50 grid grid-cols-2 gap-4`}>
                     <div>
                       <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-400 mb-2">
                         Top Brands

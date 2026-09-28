@@ -1252,7 +1252,7 @@ export default function AdminControlPanel() {
                         <span className="text-[10px] text-zinc-400 block">Mode: {p.priceMode || 'indicative'}</span>
                       </td>
                       <td className="p-3 font-mono font-bold text-emerald-600">
-                        {p.specScore?.toFixed(1) || '9.0'}
+                        {p.specScore != null ? p.specScore.toFixed(1) : 'N/A'}
                       </td>
                       <td className="p-3">
                         <div className="flex flex-wrap items-center gap-1">
@@ -1911,14 +1911,17 @@ export default function AdminControlPanel() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-zinc-500 uppercase tracking-wider mb-1">Spec Score (1.0 - 10.0)</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-zinc-500 uppercase tracking-wider">Spec Score (1.0 - 10.0)</label>
+                    <span className="text-[10px] text-zinc-400 font-normal normal-case">(Leave empty to remove)</span>
+                  </div>
                   <input
                     type="number"
                     step="0.1"
                     min="1"
                     max="10"
-                    value={editForm.specScore ?? 9.0}
-                    onChange={(e) => setEditForm({ ...editForm, specScore: parseFloat(e.target.value) })}
+                    value={editForm.specScore ?? ''}
+                    onChange={(e) => setEditForm({ ...editForm, specScore: e.target.value === '' ? null : parseFloat(e.target.value) })}
                     className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-900 dark:text-white"
                   />
                 </div>
@@ -2191,14 +2194,17 @@ export default function AdminControlPanel() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-zinc-500 uppercase tracking-wider mb-1">Spec Score (1.0 - 10.0)</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-zinc-500 uppercase tracking-wider">Spec Score (1.0 - 10.0)</label>
+                    <span className="text-[10px] text-zinc-400 font-normal normal-case">(Leave empty to remove)</span>
+                  </div>
                   <input
                     type="number"
                     step="0.1"
                     min="1"
                     max="10"
-                    value={manualProductForm.specScore ?? 9.0}
-                    onChange={(e) => setManualProductForm({ ...manualProductForm, specScore: parseFloat(e.target.value) })}
+                    value={manualProductForm.specScore ?? ''}
+                    onChange={(e) => setManualProductForm({ ...manualProductForm, specScore: e.target.value === '' ? null : parseFloat(e.target.value) })}
                     className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-900 dark:text-white"
                   />
                 </div>

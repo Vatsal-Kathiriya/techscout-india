@@ -117,7 +117,7 @@ export function addProduct(product: Partial<Product>): Product {
     gallery: product.gallery || (product.imageUrl ? [product.imageUrl] : []),
     affiliateUrl: product.affiliateUrl || `https://www.amazon.in/?tag=${INITIAL_SITE_CONFIG.affiliateStoreId}`,
     url: product.url || `https://www.amazon.in/?tag=${INITIAL_SITE_CONFIG.affiliateStoreId}`,
-    specScore: product.specScore || 9.0,
+    specScore: product.specScore !== undefined ? product.specScore : 9.0,
     specs: product.specs || {},
     verdict: product.verdict || 'Engineered for reliability and top tier performance.',
     editorialReview: product.editorialReview || product.verdict || 'A high performance addition to your technical workflow.',

@@ -72,10 +72,12 @@ export default function ProductDetailView({
           {/* Main Visual Stage */}
           <div className="w-full h-80 sm:h-[450px] bg-[#F4F4F5] dark:bg-zinc-900 rounded-2xl p-8 flex items-center justify-center relative border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
             {/* Spec score badge */}
-            <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xs border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-mono font-bold text-emerald-600">
-              <Award className="w-4 h-4" />
-              <span>Spec Score: {product.specScore ? product.specScore.toFixed(1) : '9.0'}/10</span>
-            </div>
+            {product.specScore != null && (
+              <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xs border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-mono font-bold text-emerald-600">
+                <Award className="w-4 h-4" />
+                <span>Spec Score: {product.specScore.toFixed(1)}/10</span>
+              </div>
+            )}
 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

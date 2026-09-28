@@ -39,7 +39,7 @@ export default async function HomePage() {
   ]);
 
   const festiveProducts = products.filter((p) => p.isFestiveDeal || p.dealBadge);
-  const featuredProducts = products.filter((p) => p.isFeatured || p.specScore >= 9.4);
+  const featuredProducts = products.filter((p) => p.isFeatured || (p.specScore != null && p.specScore >= 9.4));
   const activeCampaign = campaigns.find((c) => c.active) || campaigns[0];
 
   return (

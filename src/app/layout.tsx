@@ -155,7 +155,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
       <body
-        className="font-sans bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 flex flex-col min-h-screen transition-colors duration-300 antialiased"
+        className="font-sans bg-[#FAFAFA] dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 flex flex-col min-h-screen transition-colors duration-300 antialiased overflow-x-hidden"
       >
         <ThemeProvider
           attribute="class"

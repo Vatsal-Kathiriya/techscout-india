@@ -23,6 +23,9 @@ import {
   ExternalLink,
   ShieldCheck,
   Tag,
+  Menu,
+  X,
+  ChevronRight,
 } from 'lucide-react';
 import { Product, SiteConfig } from '@/types/store';
 
@@ -37,7 +40,7 @@ const CATEGORIES = [
     brackets: ['Under ₹15,000', '₹15K–₹35K', '₹35K–₹70K', 'Ultra Flagship'],
     featured: {
       title: 'iPhone 16 Pro Max',
-      spec: 'A18 Pro | 6.9" 120Hz | 48MP',
+      spec: 'A18 Pro | 6.9\" 120Hz | 48MP',
       href: '/products/prod-sp-01',
       badge: 'Editor Choice',
     },
@@ -127,7 +130,7 @@ const CATEGORIES = [
   },
   {
     id: 'compare',
-    name: 'Product Comparisons',
+    name: 'Compare',
     href: '/compare',
     icon: Scale,
   },
@@ -146,7 +149,12 @@ export default function Header() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // Mega menu state
+  // Mobile menu state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileExpandedCat, setMobileExpandedCat] = useState<string | null>(null);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  // Mega menu state (desktop)
   const [activeMegaCategory, setActiveMegaCategory] = useState<string | null>(null);
 
   // Site config state
@@ -154,6 +162,21 @@ export default function Header() {
 
   // Live countdown state for festive banner
   const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 28, seconds: 45 });
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
+  // Prevent body scroll when mobile menu open
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    }
+    return () => {
+      if (typeof document !== 'undefined') document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   // Fetch product list for instant live search and site config
   useEffect(() => {
@@ -255,12 +278,15 @@ export default function Header() {
     if (!searchQuery.trim()) return;
     router.push(`/products?q=${encodeURIComponent(searchQuery)}&cat=${selectedCategory}`);
     setIsSearchOpen(false);
+    setMobileMenuOpen(false);
+    setMobileSearchOpen(false);
   };
 
   return (
     <header className="sticky top-0 z-40 w-full shadow-sm bg-white dark:bg-zinc-950 transition-colors">
+
       {/* ========================================================================= */}
-      {/* TIER 1: TOP UTILITY & COMPLIANCE BAR                                     */}
+      {/* TIER 1: TOP UTILITY & COMPLIANCE BAR (hidden on mobile)                  */}
       {/* ========================================================================= */}
       <div className="bg-zinc-900 text-zinc-300 text-xs border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 py-1.5 flex flex-wrap items-center justify-between gap-2">
@@ -268,10 +294,11 @@ export default function Header() {
           {/* Left: Mini Amazon Affiliate Disclosure */}
           <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            <span>
+            <span className="hidden sm:inline">
               {config?.affiliateDisclosure ||
                 'GenzTech.in is reader-supported. As an Amazon Associate, we earn from qualifying purchases.'}
             </span>
+            <span className="sm:hidden text-[10px]">Reader-supported. Amazon Associate.</span>
             <Link
               href="/affiliate-disclosure"
               className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 ml-1"
@@ -300,13 +327,13 @@ export default function Header() {
           )}
 
           {/* Right: Utility Quick Links */}
-          <div className="flex items-center gap-4 text-[11px] font-medium ml-auto">
-            <Link href="/guides" className="hover:text-white transition-colors">
+          <div className="flex items-center gap-3 text-[11px] font-medium ml-auto">
+            <Link href="/guides" className="hidden md:block hover:text-white transition-colors">
               Buying Guides
             </Link>
             <Link
               href="/compare"
-              className="flex items-center gap-1 hover:text-white transition-colors"
+              className="hidden md:flex items-center gap-1 hover:text-white transition-colors"
             >
               <span>Compare Devices</span>
               {selectedProducts.length > 0 && (
@@ -325,18 +352,27 @@ export default function Header() {
       </div>
 
       {/* ========================================================================= */}
-      {/* TIER 2: MAIN AMAZON-STYLE SEARCH & BRAND BAR                             */}
+      {/* TIER 2: MAIN SEARCH & BRAND BAR                                          */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4 md:gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-4 md:gap-6">
         
-        {/* Brand Logo & Tagline */}
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="md:hidden p-2 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors shrink-0"
+          aria-label="Open menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        {/* Brand Logo */}
         <Link href="/" className="flex items-center shrink-0 group py-0.5" aria-label="GenzTech.in Home">
           {config?.brandName && config.brandName !== 'GenzTech' && config.brandName !== 'GenzTech.in' ? (
             <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tight text-zinc-950 dark:text-white">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-950 dark:text-white">
                 {config.brandName}
               </span>
-              <span className="text-[10px] text-zinc-500 font-medium tracking-wide">
+              <span className="hidden sm:block text-[10px] text-zinc-500 font-medium tracking-wide">
                 {config?.tagline || 'Smart Tech. Better Choices.'}
               </span>
             </div>
@@ -348,7 +384,7 @@ export default function Header() {
                 width={280}
                 height={49}
                 priority
-                className="h-8 sm:h-9 md:h-11 w-auto object-contain dark:hidden"
+                className="h-7 sm:h-9 md:h-11 w-auto object-contain dark:hidden"
               />
               <Image
                 src="/logo-horizontal-dark.png"
@@ -356,21 +392,21 @@ export default function Header() {
                 width={280}
                 height={49}
                 priority
-                className="h-8 sm:h-9 md:h-11 w-auto object-contain hidden dark:block"
+                className="h-7 sm:h-9 md:h-11 w-auto object-contain hidden dark:block"
               />
             </>
           )}
         </Link>
 
-        {/* Unified Scoped Search Bar */}
-        <div ref={searchRef} className="relative flex-1 max-w-3xl">
-          <form onSubmit={handleSearchSubmit} className="flex w-full shadow-sm rounded-lg overflow-hidden border-2 border-zinc-300 dark:border-zinc-700 focus-within:border-emerald-600 transition-colors">
-            
+        {/* Unified Scoped Search Bar — desktop full, mobile icon */}
+        <div ref={searchRef} className="relative flex-1 min-w-0">
+          {/* Desktop search */}
+          <form onSubmit={handleSearchSubmit} className="hidden sm:flex w-full shadow-sm rounded-lg overflow-hidden border-2 border-zinc-300 dark:border-zinc-700 focus-within:border-emerald-600 transition-colors">
             {/* Scoped Category Selector */}
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-zinc-100 dark:bg-zinc-900 text-xs font-semibold text-zinc-700 dark:text-zinc-300 px-3 py-2.5 border-r border-zinc-300 dark:border-zinc-700 focus:outline-none cursor-pointer max-w-[140px] truncate"
+              className="hidden md:block bg-zinc-100 dark:bg-zinc-900 text-xs font-semibold text-zinc-700 dark:text-zinc-300 px-3 py-2.5 border-r border-zinc-300 dark:border-zinc-700 focus:outline-none cursor-pointer max-w-[130px] truncate"
             >
               <option value="all">All Categories</option>
               <option value="smartphones">Smartphones</option>
@@ -388,26 +424,35 @@ export default function Header() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
-              placeholder="Search laptops, smartphones, ANC earbuds, hardware specs..."
-              className="w-full px-4 py-2.5 bg-white dark:bg-zinc-950 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none"
+              placeholder="Search laptops, smartphones, earbuds..."
+              className="w-full px-3 py-2.5 bg-white dark:bg-zinc-950 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none"
             />
 
             {/* Submit button */}
             <button
               type="submit"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 flex items-center justify-center transition-colors"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 sm:px-5 flex items-center justify-center transition-colors"
               aria-label="Search"
             >
               <Search className="w-4 h-4" />
             </button>
           </form>
 
+          {/* Mobile Search Button */}
+          <button
+            onClick={() => setMobileSearchOpen((o) => !o)}
+            className="sm:hidden p-2 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            aria-label="Search"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+
           {/* Instant Debounced Autocomplete Dropdown */}
           {isSearchOpen && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-lg shadow-2xl overflow-hidden z-50 divide-y divide-zinc-100 dark:divide-zinc-800">
               {searchResults.length === 0 ? (
                 <div className="p-4 text-center text-xs text-zinc-500 font-mono">
-                  No matching hardware discovered for &ldquo;{searchQuery}&rdquo;. Press Enter to explore catalog.
+                  No matching hardware for &ldquo;{searchQuery}&rdquo;. Press Enter to explore catalog.
                 </div>
               ) : (
                 searchResults.map((prod, idx) => (
@@ -465,7 +510,7 @@ export default function Header() {
               )}
 
               <div className="bg-zinc-50 dark:bg-zinc-950 p-2.5 text-center text-xs text-zinc-500 font-mono flex items-center justify-between px-4">
-                <span>Use ↑ ↓ to navigate, Enter to select</span>
+                <span className="hidden sm:inline">Use ↑ ↓ to navigate, Enter to select</span>
                 <Link
                   href={`/products?q=${encodeURIComponent(searchQuery)}`}
                   onClick={() => setIsSearchOpen(false)}
@@ -478,7 +523,7 @@ export default function Header() {
           )}
         </div>
 
-        {/* Quick Action Buttons */}
+        {/* Quick Action Buttons — desktop only */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
           <Link
             href="/deals"
@@ -501,13 +546,49 @@ export default function Header() {
             )}
           </button>
         </div>
+
+        {/* Mobile Compare badge */}
+        {selectedProducts.length > 0 && (
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className="md:hidden flex items-center gap-1 px-2 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg shrink-0"
+          >
+            <Scale className="w-3.5 h-3.5" />
+            <span>{selectedProducts.length}</span>
+          </button>
+        )}
       </div>
 
+      {/* Mobile Search Bar (expands below header on tap) */}
+      {mobileSearchOpen && (
+        <div className="sm:hidden border-t border-zinc-200 dark:border-zinc-800 px-3 py-2.5 bg-white dark:bg-zinc-950">
+          <form onSubmit={handleSearchSubmit} className="flex w-full shadow-sm rounded-lg overflow-hidden border-2 border-zinc-300 dark:border-zinc-700 focus-within:border-emerald-600 transition-colors">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
+              placeholder="Search products..."
+              autoFocus
+              className="w-full px-3 py-2.5 bg-white dark:bg-zinc-950 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 flex items-center justify-center transition-colors"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
+      )}
+
       {/* ========================================================================= */}
-      {/* TIER 3: HORIZONTAL CATEGORY STRIP & AMAZON-STYLE MEGA MENU               */}
+      {/* TIER 3: HORIZONTAL CATEGORY STRIP — Desktop Only                         */}
       {/* ========================================================================= */}
       <div
-        className="bg-zinc-50 dark:bg-zinc-900/90 border-y border-zinc-200 dark:border-zinc-800 relative"
+        className="hidden md:block bg-zinc-50 dark:bg-zinc-900/90 border-y border-zinc-200 dark:border-zinc-800 relative"
         onMouseLeave={() => setActiveMegaCategory(null)}
       >
         <div className="max-w-7xl mx-auto px-4 flex items-center overflow-x-auto scrollbar-none">
@@ -633,6 +714,191 @@ export default function Header() {
           })}
         </div>
       </div>
+
+      {/* ========================================================================= */}
+      {/* MOBILE FULL-SCREEN MENU DRAWER                                           */}
+      {/* ========================================================================= */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Drawer Panel */}
+          <div className="relative w-[85vw] max-w-sm h-full bg-white dark:bg-zinc-950 flex flex-col shadow-2xl overflow-y-auto">
+            
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                <Image
+                  src="/logo-horizontal.png"
+                  alt="GenzTech.in"
+                  width={160}
+                  height={30}
+                  className="h-7 w-auto object-contain dark:hidden"
+                />
+                <Image
+                  src="/logo-horizontal-dark.png"
+                  alt="GenzTech.in"
+                  width={160}
+                  height={30}
+                  className="h-7 w-auto object-contain hidden dark:block"
+                />
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Mobile Search inside drawer */}
+            <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
+              <form onSubmit={handleSearchSubmit} className="flex rounded-lg overflow-hidden border-2 border-zinc-300 dark:border-zinc-700 focus-within:border-emerald-600 transition-colors">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products..."
+                  className="w-full px-3 py-2.5 bg-white dark:bg-zinc-950 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="bg-emerald-600 text-white px-4 flex items-center justify-center"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </form>
+            </div>
+
+            {/* Quick Links row */}
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
+              <Link
+                href="/deals"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-300 rounded-lg"
+              >
+                <Flame className="w-3.5 h-3.5 text-amber-500" />
+                Today&apos;s Deals
+              </Link>
+              <Link
+                href="/compare"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg"
+              >
+                <Scale className="w-3.5 h-3.5 text-emerald-600" />
+                Compare
+                {selectedProducts.length > 0 && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-emerald-600 text-white rounded-full text-[10px]">
+                    {selectedProducts.length}
+                  </span>
+                )}
+              </Link>
+              <ThemeToggle />
+            </div>
+
+            {/* Category list */}
+            <nav className="flex-1 overflow-y-auto">
+              <div className="px-4 pt-3 pb-1">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-400">
+                  Browse Categories
+                </span>
+              </div>
+              {CATEGORIES.map((cat) => {
+                const Icon = cat.icon;
+                const isExpanded = mobileExpandedCat === cat.id;
+
+                return (
+                  <div key={cat.id}>
+                    {/* Category Row */}
+                    <div
+                      className={`flex items-center justify-between mx-4 my-0.5 rounded-xl transition-colors ${
+                        cat.isSpecial
+                          ? 'bg-amber-50 dark:bg-amber-950/30'
+                          : 'hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                      }`}
+                    >
+                      <Link
+                        href={cat.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center gap-3 flex-1 px-3 py-3 text-sm font-semibold ${
+                          cat.isSpecial
+                            ? 'text-amber-700 dark:text-amber-400'
+                            : 'text-zinc-800 dark:text-zinc-200'
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 shrink-0 ${cat.isSpecial ? 'text-amber-500' : 'text-emerald-600'}`} />
+                        {cat.name}
+                      </Link>
+                      {cat.brands && (
+                        <button
+                          onClick={() => setMobileExpandedCat(isExpanded ? null : cat.id)}
+                          className="px-3 py-3 text-zinc-400"
+                          aria-label={`Expand ${cat.name}`}
+                        >
+                          <ChevronRight className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Expanded sub-links */}
+                    {isExpanded && cat.brands && (
+                      <div className="mx-4 mb-1 bg-zinc-50 dark:bg-zinc-900 rounded-xl overflow-hidden">
+                        <div className="px-4 pt-3 pb-1">
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+                            Top Brands
+                          </span>
+                        </div>
+                        {cat.brands.map((b) => (
+                          <Link
+                            key={b}
+                            href={`/category/${cat.id}?brand=${encodeURIComponent(b)}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2 text-xs text-zinc-700 dark:text-zinc-300 hover:text-emerald-600"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0" />
+                            {b}
+                          </Link>
+                        ))}
+                        {cat.brackets && (
+                          <>
+                            <div className="px-4 pt-3 pb-1 border-t border-zinc-200 dark:border-zinc-800 mt-1">
+                              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+                                Price Brackets
+                              </span>
+                            </div>
+                            {cat.brackets.map((brk) => (
+                              <Link
+                                key={brk}
+                                href={`/category/${cat.id}?bracket=${encodeURIComponent(brk)}`}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-2 px-4 py-2 text-xs text-zinc-700 dark:text-zinc-300 hover:text-emerald-600"
+                              >
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 shrink-0" />
+                                {brk}
+                              </Link>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
+
+            {/* Footer of drawer */}
+            <div className="px-4 py-4 border-t border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-400 shrink-0">
+              <p>Reader-supported. Amazon Associate.</p>
+              <Link href="/affiliate-disclosure" className="text-emerald-500 underline">Disclosure</Link>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

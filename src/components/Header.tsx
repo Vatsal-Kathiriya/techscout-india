@@ -285,71 +285,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 w-full shadow-sm bg-white dark:bg-zinc-950 transition-colors">
 
-      {/* ========================================================================= */}
-      {/* TIER 1: TOP UTILITY & COMPLIANCE BAR (hidden on mobile)                  */}
-      {/* ========================================================================= */}
-      <div className="bg-zinc-900 text-zinc-300 text-xs border-b border-zinc-800">
-        <div className="max-w-7xl mx-auto px-4 py-1.5 flex flex-wrap items-center justify-between gap-2">
-          
-          {/* Left: Mini Amazon Affiliate Disclosure */}
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            <span className="hidden sm:inline">
-              {config?.affiliateDisclosure ||
-                'GenzTech.in is reader-supported. As an Amazon Associate, we earn from qualifying purchases.'}
-            </span>
-            <span className="sm:hidden text-[10px]">Reader-supported. Amazon Associate.</span>
-            <Link
-              href="/affiliate-disclosure"
-              className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 ml-1"
-            >
-              Disclosure
-            </Link>
-          </div>
 
-          {/* Center: Dynamic Festive Deal Ticker with Live Countdown */}
-          {config?.tickerActive !== false && (
-            <div className="hidden lg:flex items-center gap-2 text-[11px]">
-              <span className="flex items-center gap-1 font-bold text-amber-400 uppercase tracking-wider bg-amber-950/80 border border-amber-800/60 px-2 py-0.5 rounded">
-                <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-                Festive Tech Sale
-              </span>
-              <span className="text-zinc-300 font-medium">
-                {config?.tickerText || 'Up to 45% Off Laptops & Flagship Phones'}
-              </span>
-              <span className="text-zinc-500">•</span>
-              <span className="font-mono text-amber-300 font-bold bg-zinc-800 px-1.5 py-0.5 rounded">
-                Ends in {String(timeLeft.hours).padStart(2, '0')}h :{' '}
-                {String(timeLeft.minutes).padStart(2, '0')}m :{' '}
-                {String(timeLeft.seconds).padStart(2, '0')}s
-              </span>
-            </div>
-          )}
-
-          {/* Right: Utility Quick Links */}
-          <div className="flex items-center gap-3 text-[11px] font-medium ml-auto">
-            <Link href="/guides" className="hidden md:block hover:text-white transition-colors">
-              Buying Guides
-            </Link>
-            <Link
-              href="/compare"
-              className="hidden md:flex items-center gap-1 hover:text-white transition-colors"
-            >
-              <span>Compare Devices</span>
-              {selectedProducts.length > 0 && (
-                <span className="bg-emerald-600 text-white px-1.5 py-0.2 rounded-full text-[10px] font-bold">
-                  {selectedProducts.length}
-                </span>
-              )}
-            </Link>
-            <Link href="/deals" className="text-amber-400 hover:text-amber-300 flex items-center gap-1">
-              <Flame className="w-3 h-3" />
-              <span>Best Deals</span>
-            </Link>
-            <ThemeToggle />
-          </div>
-        </div>
-      </div>
 
       {/* ========================================================================= */}
       {/* TIER 2: MAIN SEARCH & BRAND BAR                                          */}
@@ -523,7 +459,7 @@ export default function Header() {
           )}
         </div>
 
-        {/* Quick Action Buttons — desktop only */}
+        {/* Quick Action Buttons - desktop only */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
           <Link
             href="/deals"
@@ -545,6 +481,10 @@ export default function Header() {
               </span>
             )}
           </button>
+          
+          <div className="ml-1 border-l pl-3 border-zinc-200 dark:border-zinc-800">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Mobile Compare badge */}

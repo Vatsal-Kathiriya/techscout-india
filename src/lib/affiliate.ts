@@ -16,11 +16,14 @@ export function getUniversalRedirectUrl(product?: {
 
   const rawUrl = (product.affiliateUrl || product.url || '').trim();
 
-  // 1. If it's an official Amazon short link (amzn.to, amzn.in)
+  // 1. If it's an official Amazon short link (link.amazon, amzlinks.in, amzn.to, amzn.in)
   // Amazon already has the affiliate tracking and store ID baked into the short code.
   if (
     rawUrl &&
-    (rawUrl.includes('amzn.to') || rawUrl.includes('amzn.in'))
+    (rawUrl.includes('link.amazon') ||
+      rawUrl.includes('amzlinks.in') ||
+      rawUrl.includes('amzn.to') ||
+      rawUrl.includes('amzn.in'))
   ) {
     return rawUrl;
   }

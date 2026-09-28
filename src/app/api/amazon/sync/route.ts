@@ -5,15 +5,17 @@ import { STORE_ID } from '@/lib/affiliate';
 import { isRequestAuthorized } from '@/lib/auth';
 
 /**
- * Follow shortlink redirects (e.g. amzn.in, amzn.to) using native fetch
- * checking the Location header to quickly resolve to the final Amazon product URL.
+ * Follow multi-hop shortlink redirects:
+ * - link.amazon (New Amazon SiteStripe Deeplink) -> amzlinks.in -> amazon.in/dp/...
+ * - amzn.to (SiteStripe) -> amazon.in/dp/...
+ * - amzn.in/d/... (Amazon App) -> amazon.in/dp/...
  */
 async function resolveShortlink(shortUrl: string): Promise<string> {
   let currentUrl = shortUrl;
-  for (let hop = 0; hop < 5; hop++) {
+  for (let hop = 0; hop < 6; hop++) {
     try {
       const res = await fetch(currentUrl, {
-        method: 'HEAD',
+        method: 'GET',
         redirect: 'manual',
         headers: {
           'User-Agent':
@@ -33,31 +35,19 @@ async function resolveShortlink(shortUrl: string): Promise<string> {
         : new URL(location, currentUrl).toString();
 
       // Check if we hit an ASIN in the URL
-      if (
+      const asinMatch =
         currentUrl.match(/\/dp\/([A-Z0-9]{10})/i) ||
         currentUrl.match(/\/gp\/product\/([A-Z0-9]{10})/i) ||
         currentUrl.match(/\/gp\/aw\/d\/([A-Z0-9]{10})/i) ||
-        currentUrl.match(/\b(B0[A-Z0-9]{8})\b/i)
-      ) {
+        currentUrl.match(/\b(B0[A-Z0-9]{8})\b/i);
+
+      if (asinMatch) {
         return currentUrl;
       }
     } catch {
       break;
     }
   }
-
-  // Fallback: full GET redirect follow
-  try {
-    const getRes = await fetch(currentUrl, {
-      method: 'GET',
-      redirect: 'follow',
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      },
-    });
-    if (getRes.url) return getRes.url;
-  } catch {}
 
   return currentUrl;
 }
@@ -78,57 +68,45 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Extract URL if user pasted mobile share text containing a link
+    // 1. Extract URL if user pasted text from a mobile share sheet
     const urlMatch = rawInput.match(/(https?:\/\/[^\s\)\>]+)/i);
     let targetUrl = urlMatch ? urlMatch[1] : (rawInput.startsWith('http') ? rawInput : '');
 
     let extractedAsin = '';
 
-    // 2. First check if a 10-digit ASIN is already visible in the raw text or URL
-    const explicitAsinMatch =
-      rawInput.match(/\/dp\/([A-Z0-9]{10})/i) ||
-      rawInput.match(/\/gp\/product\/([A-Z0-9]{10})/i) ||
-      rawInput.match(/\/gp\/aw\/d\/([A-Z0-9]{10})/i) ||
-      rawInput.match(/\/d\/([A-Z0-9]{10})/i) ||
+    // 2. If it's any Amazon short link (link.amazon, amzlinks.in, amzn.in, amzn.to), resolve redirects
+    const isShortLink =
+      targetUrl &&
+      (targetUrl.includes('link.amazon') ||
+        targetUrl.includes('amzlinks.in') ||
+        targetUrl.includes('amzn.in') ||
+        targetUrl.includes('amzn.to'));
+
+    if (isShortLink) {
+      targetUrl = await resolveShortlink(targetUrl);
+    }
+
+    // 3. Extract 10-character ASIN from resolved targetUrl or rawInput
+    const asinMatch =
+      targetUrl.match(/\/dp\/([A-Z0-9]{10})/i) ||
+      targetUrl.match(/\/gp\/product\/([A-Z0-9]{10})/i) ||
+      targetUrl.match(/\/gp\/aw\/d\/([A-Z0-9]{10})/i) ||
+      targetUrl.match(/\/d\/([A-Z0-9]{10})/i) ||
+      targetUrl.match(/\b(B0[A-Z0-9]{8})\b/i) ||
       rawInput.match(/\b(B0[A-Z0-9]{8})\b/i) ||
       rawInput.match(/^([A-Z0-9]{10})$/i);
 
-    if (explicitAsinMatch) {
-      extractedAsin = explicitAsinMatch[1].toUpperCase();
+    if (asinMatch) {
+      extractedAsin = asinMatch[1].toUpperCase();
     }
 
-    // 3. If no direct ASIN was found, check for short links that need redirect resolution
-    if (!extractedAsin && targetUrl) {
-      if (targetUrl.includes('amzn.in') || targetUrl.includes('amzn.to')) {
-        targetUrl = await resolveShortlink(targetUrl);
-        const resolvedMatch =
-          targetUrl.match(/\/dp\/([A-Z0-9]{10})/i) ||
-          targetUrl.match(/\/gp\/product\/([A-Z0-9]{10})/i) ||
-          targetUrl.match(/\/gp\/aw\/d\/([A-Z0-9]{10})/i) ||
-          targetUrl.match(/\/d\/([A-Z0-9]{10})/i) ||
-          targetUrl.match(/\b(B0[A-Z0-9]{8})\b/i);
-        if (resolvedMatch) {
-          extractedAsin = resolvedMatch[1].toUpperCase();
-        }
-      }
-    }
-
-    // 4. Validate ASIN: catch common user typo (e.g. 9-character ASIN like B0gpHrVNJ)
+    // 4. Validate ASIN: catch invalid inputs
     if (!extractedAsin) {
-      const partialAsinMatch = rawInput.match(/\b(B0[A-Z0-9]{7})\b/i);
-      if (partialAsinMatch) {
+      // Check if user manually typed a standalone 9-character ASIN (not a shortlink URL)
+      if (!targetUrl && rawInput.match(/^[A-Z0-9]{8,9}$/i)) {
         return NextResponse.json(
           {
-            error: `"${partialAsinMatch[1]}" has only 9 characters. Amazon ASINs must be exactly 10 alphanumeric characters (e.g. B082LSVT4B). Please verify the 10th character or copy the full Amazon product link.`,
-          },
-          { status: 400 }
-        );
-      }
-
-      if (rawInput.includes('link.amazon')) {
-        return NextResponse.json(
-          {
-            error: `Invalid domain "link.amazon". Please paste a valid link from amazon.in, amzn.in, or amzn.to, or paste the 10-digit ASIN directly (e.g. B082LSVT4B).`,
+            error: `"${rawInput}" has ${rawInput.length} characters. Amazon ASINs must be exactly 10 alphanumeric characters (e.g. B082LSVT4B). Please verify the ASIN or copy the full Amazon product link.`,
           },
           { status: 400 }
         );
@@ -136,69 +114,63 @@ export async function POST(req: Request) {
 
       return NextResponse.json(
         {
-          error: `Could not detect a valid Amazon ASIN or product link from "${rawInput}". Please paste an Amazon.in URL, amzn.in short link, or 10-digit ASIN (e.g. B082LSVT4B).`,
+          error: `Could not extract an Amazon product ASIN from "${rawInput}". Please make sure the link or ASIN is active on Amazon India.`,
         },
         { status: 400 }
       );
     }
 
-    // 5. Multi-tier scraping: Desktop Tier 1 -> Mobile Tier 2
+    // 5. Multi-tier scraping: Mobile Tier 1 (faster, bypasses bot checks) -> Desktop Tier 2
     let html = '';
     let fetchStatus = 200;
 
-    // Tier 1: Desktop Amazon Product Page
-    const desktopUrl = `https://www.amazon.in/dp/${extractedAsin}`;
+    // Mobile Amazon Endpoint (lightweight and resilient against anti-bot)
+    const mobileUrl = `https://www.amazon.in/gp/aw/d/${extractedAsin}`;
     try {
-      const desktopRes = await axios.get(desktopUrl, {
+      const mobileRes = await axios.get(mobileUrl, {
         headers: {
           'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
           Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
           'Accept-Language': 'en-IN,en-GB;q=0.9,en;q=0.8',
-          'Accept-Encoding': 'gzip, deflate, br',
           Connection: 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
-          'Sec-Fetch-Dest': 'document',
-          'Sec-Fetch-Mode': 'navigate',
-          'Sec-Fetch-Site': 'none',
-          'Sec-Fetch-User': '?1',
         },
         timeout: 9000,
       });
-      html = desktopRes.data;
-      fetchStatus = desktopRes.status;
-    } catch (desktopErr: any) {
-      fetchStatus = desktopErr.response?.status || 500;
+      html = mobileRes.data;
+      fetchStatus = mobileRes.status;
+    } catch (mobileErr: any) {
+      fetchStatus = mobileErr.response?.status || 500;
     }
 
     let $ = cheerio.load(html || '');
-    let title = $('#productTitle').text().trim();
+    let title =
+      $('#title').text().trim() ||
+      $('#productTitle').text().trim() ||
+      $('h1').first().text().trim();
 
-    // Tier 2: Mobile failover if desktop returned no title or was challenged
+    // Desktop fallback if mobile returned empty title
     if (!title) {
-      const mobileUrl = `https://www.amazon.in/gp/aw/d/${extractedAsin}`;
+      const desktopUrl = `https://www.amazon.in/dp/${extractedAsin}`;
       try {
-        const mobileRes = await axios.get(mobileUrl, {
+        const desktopRes = await axios.get(desktopUrl, {
           headers: {
             'User-Agent':
-              'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
             Accept:
-              'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+              'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
             'Accept-Language': 'en-IN,en-GB;q=0.9,en;q=0.8',
             'Accept-Encoding': 'gzip, deflate, br',
             Connection: 'keep-alive',
           },
           timeout: 9000,
         });
-        $ = cheerio.load(mobileRes.data);
-        title =
-          $('#title').text().trim() ||
-          $('#productTitle').text().trim() ||
-          $('h1').first().text().trim();
-      } catch (mobileErr: any) {
+        $ = cheerio.load(desktopRes.data || '');
+        title = $('#productTitle').text().trim() || $('title').text().trim();
+      } catch (desktopErr: any) {
         if (!fetchStatus || fetchStatus === 200) {
-          fetchStatus = mobileErr.response?.status || 500;
+          fetchStatus = desktopErr.response?.status || 500;
         }
       }
     }
@@ -307,12 +279,11 @@ export async function POST(req: Request) {
     const finalMrp = numMrp > numPrice ? mrp : cleanPrice;
 
     // Affiliate URL construction:
-    // If user provided a short link (amzn.to, amzn.in), keep it intact!
+    // If user provided a short link (link.amazon, amzlinks.in, amzn.to, amzn.in), keep it intact!
     // Otherwise construct universal affiliate URL with STORE_ID.
-    let finalAffiliateUrl =
-      targetUrl && (targetUrl.includes('amzn.to') || targetUrl.includes('amzn.in'))
-        ? targetUrl
-        : `https://www.amazon.in/dp/${extractedAsin}?tag=${STORE_ID}`;
+    let finalAffiliateUrl = isShortLink
+      ? rawInput
+      : `https://www.amazon.in/dp/${extractedAsin}?tag=${STORE_ID}`;
 
     return NextResponse.json({
       asin: extractedAsin,

@@ -1092,7 +1092,7 @@ export default function AdminControlPanel() {
                 <span className="text-[10px] font-mono text-zinc-400">Auto-Crawler</span>
               </div>
               <p className="text-xs text-zinc-500 leading-relaxed">
-                Paste any Amazon.in link (SiteStripe short link like <code>https://amzn.to/...</code>, mobile share link <code>https://amzn.in/d/...</code>, or full product URL) or a 10-character ASIN (e.g. <code>B082LSVT4B</code>). Our crawler extracts title, verified price, high-res image, and binds <code>{configForm.affiliateStoreId || 'genztech019-21'}</code>.
+                Paste any Amazon.in link (SiteStripe deeplink like <code>https://link.amazon/...</code> or <code>https://amzn.to/...</code>, mobile share link <code>https://amzn.in/d/...</code>, or full product URL) or a 10-character ASIN (e.g. <code>B082LSVT4B</code>). Our crawler extracts title, verified price, high-res image, and binds <code>{configForm.affiliateStoreId || 'genztech019-21'}</code>.
               </p>
 
               <form onSubmit={handleAddProductScraper} className="flex flex-col sm:flex-row gap-3">
@@ -1101,7 +1101,7 @@ export default function AdminControlPanel() {
                   required
                   value={asinInput}
                   onChange={(e) => setAsinInput(e.target.value)}
-                  placeholder="Paste Amazon link (amzn.in, amzn.to, amazon.in) or 10-digit ASIN (e.g. B082LSVT4B)..."
+                  placeholder="Paste Amazon link (link.amazon, amzn.to, amzn.in, amazon.in) or 10-digit ASIN (e.g. B082LSVT4B)..."
                   className="flex-1 px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-600 font-mono"
                 />
                 <button
